@@ -3,7 +3,7 @@ import { SmartFormsRenderer, getResponse } from '@aehrc/smart-forms-renderer';
 import './App.css'
 
 
-import generate from './prompts/generate'
+import {generate, refine } from './prompts/generate'
 
 console.log(import.meta.env)
 
@@ -97,12 +97,13 @@ const App = () => {
 
     useEffect(()=>{
         if (!startingForm) return;
-      (async function(){
-        const result = await  generate(client, startingForm);
-        console.log("Result", result)
-        setQuestionnaire(result.json)
-       })()
-    
+        (async function(){
+            const result = await  generate(client, startingForm);
+            console.log("Result", result)
+            setQuestionnaire(result.json)
+            const refineIdeas = await refine(client, questionnaire)
+            
+        })()
     }, [startingForm])
 
     const handleAction = {

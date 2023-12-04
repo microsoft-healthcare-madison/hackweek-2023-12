@@ -1,17 +1,5 @@
 import { OpenAI } from "openai";
-
-/**
- *
- * @param {OpenAI} client
- * @param {string} formText
- */
-export default async function generate(client, formText) {
-    const messages = [
-    {
-        role: "system",
-        content:
-          `You are a clinical informatics assistant familiar with FHIR. You know the full Questionnaire data model:
-{doco
+const schema = `{
   "resourceType" : "Questionnaire",
   // from Resource: id, meta, implicitRules, and language
   // from DomainResource: text, contained, extension, and modifierExtension
@@ -97,8 +85,20 @@ export default async function generate(client, formText) {
     }],
     "item" : [{ Content as for Questionnaire.item }] // Nested questionnaire items
   }]
-}
-          `,
+}`
+/**
+ *
+ * @param {OpenAI} client
+ * @param {string} formText
+ */
+export async function generate(client, formText) {
+    const messages = [
+    {
+        role: "system",
+        content:
+          `You are a clinical informatics assistant familiar with FHIR. You know the full Questionnaire data model:
+${schema}
+`,
       },
       {
         role: "user",
@@ -164,3 +164,61 @@ async function validate(r) {
     resultJson.issue = resultJson.issue.filter(i => !i.diagnostics.match("dom-6"))
     return resultJson
 }
+/**
+ *
+ * @param {OpenAI} client
+ * @param {string} formText
+ */
+
+export async function refine(client, questionnaire) {
+    const messages = [
+    {
+        role: "system",
+        content:
+          `You are a clinical informatics assistant familiar with FHIR. You know the Questionnaire resource is ${schema}`,
+      },
+      {
+        role: "user",
+        content: `I have a draft of a FHIR Questionnaire Items Array:
+${"```"}
+${JSON.stringify(questionnaire.item, null, 2)}
+${"```"}
+
+Please ouptut 3 categories of things I can improve in this questionnaire, with 2+
+suggestions in each category. Here are some ideas about where to start:
+
+* Wording / language / clarity / inclusiveness
+* Missing items we should ask about
+* Logic like enableWhen that we should include
+
+But use your own judgment to come up with categories based on the content you observe.
+
+Your response is a JSON object following this Response interface
+
+interface Response {
+    categories: {
+        shortTitle: string,
+        suggestions: {
+            text: string,
+            type: "AddItem" |  "EditItemText",
+            itemLinkId: string.
+            itemText: string?
+        }[]
+    }[]
+}
+Respond with a JSON Response object.`
+      },
+    ]
+        let response = await client.chat.completions.create({
+            model: 'gpt-4-1106-preview',
+            temperature: 1.0,
+            response_format: {type:'json_object'},
+            messages
+        });
+
+        let ideas = JSON.parse(response.choices[0].message.content);
+        console.log("IDEAS", ideas)
+
+    return ideas 
+}
+
