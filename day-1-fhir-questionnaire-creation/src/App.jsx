@@ -1,10 +1,17 @@
-'use client'
+import React, { useEffect, useState } from 'react';
+import './App.css'
 
-import Image from 'next/image'
+console.log(import.meta.env)
+
+import { OpenAI } from "openai";
+
+let client = new OpenAI({
+  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+  organization: import.meta.env.VITE_OPENAI_API_ORG,
+  dangerouslyAllowBrowser: true
+})
 
 
-import React, { useState } from 'react';
-import 'tailwindcss/tailwind.css'; // Import Tailwind CSS
 
 // ActionItem Component
 const ActionItem = ({ action, onApply, onAdjust, onIgnore }) => {
@@ -81,6 +88,22 @@ const App = () => {
         "Category 2": [{ name: "Action 2.1" }, { name: "Action 2.2" }]
     };
 
+    const [welcome, setWelcome] = useState("Welcome Message...")
+
+    useEffect(()=>{
+
+      (async function(){
+      let c = await client.chat.completions.create({
+        model: "gpt-3.5-turbo-1106",
+        temperature: 1.0,
+        messages: [{role: "user", content: "Please create a one-sentence welcome message for users of a FHIR Questionnaire Editor"}]
+      })
+      setWelcome(c.choices[0].message.content)
+      })()
+
+
+    }, [])
+
     const handleAction = {
         apply: (action) => console.log("Apply", action),
         adjust: (action) => console.log("Adjust", action),
@@ -91,6 +114,7 @@ const App = () => {
         <div className="flex h-screen">
             <div className="w-1/3 overflow-y-auto">
                 {/* Left Pane: Categories and Actions */}
+          {welcome}
                 {Object.entries(categories).map(([categoryName, actions], index) => (
                     <Category
                         key={index}
