@@ -1,0 +1,126 @@
+1. Are you Hispanic or Latino?
+   A. Yes
+   B. No
+   C. I choose not to answer this question
+
+2. Which race(s) are you? (Check all that apply)
+   A. Asian
+   B. Native Hawaiian
+   C. Pacific Islander
+   D. Black/African American
+   E. White
+   F. American Indian/Alaskan Native
+   G. Other (please write)
+   H. I choose not to answer this question
+
+3. At any point in the past 2 years, has season or migrant farm work been your or your family’s main source of income?
+   A. Yes
+   B. No
+   C. I choose not to answer this question
+
+4. Have you been discharged from the armed forces of the United States?
+   A. Yes
+   B. No
+   C. I choose not to answer this question
+
+5. What language are you most comfortable speaking?
+   A. [Open-ended response]
+
+6. How many family members, including yourself, do you currently live with?
+   A. [Open-ended response]
+
+7. What is your housing situation today?
+   A. I have housing
+   B. I do not have housing (staying with others, in a hotel, in a shelter, living outside on the street, on a beach, in a car, or in a park)
+   C. I choose not to answer this question
+
+8. Are you worried about losing your housing?
+   A. Yes
+   B. No
+   C. I choose not to answer this question
+
+9. What address do you live at?
+   A. [Open-ended response for Street, City, State, Zip code]
+
+10. What is the highest level of school that you have finished?
+    A. Less than high school degree
+    B. High school diploma or GED
+    C. More than high school
+    D. I choose not to answer this question
+
+11. What is your current work situation?
+    A. Unemployed
+    B. Part-time or temporary work
+    C. Full-time work
+    D. Otherwise unemployed but not seeking work (ex: student, retired, disabled, unpaid primary caregiver)
+    E. [Open-ended response]
+    F. I choose not to answer this question
+
+12. What is your main insurance?
+    A. None/uninsured
+    B. CHIP
+    C. Medicaid
+    D. Other public insurance (not CHIP)
+    E. Private Insurance
+    F. I choose not to answer this question
+
+13. During the past year, what was the total combined income for you and the family members you live with?
+    A. [Open-ended response]
+    B. I choose not to answer this question
+
+14. In the past year, have you or any family members you live with been unable to get any of the following when it was really needed? (Check all that apply)
+    A. Food
+    B. Clothing
+    C. Utilities
+    D. Child Care
+    E. Medicine or Any Health Care (Medical, Dental, Mental Health, Vision)
+    F. Phone
+    G. Other (please write)
+    H. I choose not to answer this question
+
+15. Has lack of transportation kept you from medical appointments, meetings, work, or from getting things needed for daily living? (Check all that apply)
+    A. Yes, it has kept me from medical appointments
+    B. Yes, it has kept me from getting medications
+    C. Yes, it has kept me from non-medical meetings, work, or from getting things that I need
+    D. No
+    E. I choose not to answer this question
+
+16. How often do you see or talk to people that you care about and feel close to? (For example: talking to friends on the phone, visiting friends or family, going to church or club meetings)
+    A. Less than once a week
+    B. 1 or 2 times a week
+    C. 3 to 5 times a week
+    D. 6 or more times a week
+    E. I choose not to answer this question
+
+17. Stress is when someone feels tense, nervous, anxious, or can’t sleep at night because their mind is troubled. How stressed are you?
+    A. Not at all
+    B. A little bit
+    C. Somewhat
+    D. Quite a bit
+    E. Very much
+    F. I choose not to answer this question
+
+18. In the past year, have you spent more than 2 nights in a row in a jail, prison, detention center, or juvenile correctional facility?
+    A. Yes
+    B. No
+    C. I choose not to answer this question
+
+19. Are you a refugee
+
+?
+    A. Yes
+    B. No
+    C. I choose not to answer this question
+
+20. Do you feel physically and emotionally safe where you currently live?
+    A. Yes
+    B. No
+    C. Unsure
+    D. I choose not to answer this question
+
+21. In the past year, have you been afraid of your partner or ex-partner?
+    A. Yes
+    B. No
+    C. Unsure
+    D. I have not had a partner in the past year
+    E. I choose not to answer this question
