@@ -1,5 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { SmartFormsRenderer, getResponse } from '@aehrc/smart-forms-renderer';
 import './App.css'
+
+
+import generate from './prompts/generate'
 
 console.log(import.meta.env)
 
@@ -10,8 +14,6 @@ let client = new OpenAI({
   organization: import.meta.env.VITE_OPENAI_API_ORG,
   dangerouslyAllowBrowser: true
 })
-
-
 
 // ActionItem Component
 const ActionItem = ({ action, onApply, onAdjust, onIgnore }) => {
@@ -71,11 +73,10 @@ const ChatDialog = () => {
 };
 
 // Preview Component
-const Preview = () => {
+const Preview = (props) => {
     return (
-        <div className="p-4 bg-gray-100 h-full">
-            {/* Preview content goes here */}
-            <p>Preview Pane</p>
+        <div id="formcontainer" className="p-4 bg-gray-100 h-full">
+         <SmartFormsRenderer questionnaire={props.questionnaire}/>
         </div>
     );
 };
@@ -89,20 +90,20 @@ const App = () => {
     };
 
     const [welcome, setWelcome] = useState("Welcome Message...")
+    const [startingForm, setStartingForm] = useState(null);
+    const [pastedText, setPastedText] = useState("");
+    const [questionnaire, setQuestionnaire] = useState({})
+
 
     useEffect(()=>{
-
+        if (!startingForm) return;
       (async function(){
-      let c = await client.chat.completions.create({
-        model: "gpt-3.5-turbo-1106",
-        temperature: 1.0,
-        messages: [{role: "user", content: "Please create a one-sentence welcome message for users of a FHIR Questionnaire Editor"}]
-      })
-      setWelcome(c.choices[0].message.content)
-      })()
-
-
-    }, [])
+        const result = await  generate(client, startingForm);
+        console.log("Result", result)
+        setQuestionnaire(result.json)
+       })()
+    
+    }, [startingForm])
 
     const handleAction = {
         apply: (action) => console.log("Apply", action),
@@ -110,7 +111,7 @@ const App = () => {
         ignore: (action) => console.log("Ignore", action)
     };
 
-    return (
+    return startingForm ? (
         <div style={{
             display: 'flex',
             flexDirection: 'column'
@@ -134,8 +135,21 @@ const App = () => {
             </div>
             <div style={{flex: 1}}>
                 {/* Right Pane: Preview */}
-                <Preview />
+                <Preview questionnaire={questionnaire}/>
             </div>
+        </div>
+    ) : (
+        <div>
+            Welcome. Please paste some form text to start with
+            <textarea onChange={function(e){
+                console.log("OC", e);
+                setPastedText(e.target.value)
+            }} value={pastedText}></textarea>
+            <button onClick={function(e){
+                console.log("Welcome", pastedText)
+                setStartingForm(pastedText)
+                }}>Begin</button>
+
         </div>
     );
 };
