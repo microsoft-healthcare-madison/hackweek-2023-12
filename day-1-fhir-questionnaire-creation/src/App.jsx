@@ -111,8 +111,12 @@ const App = () => {
     };
 
     return (
-        <div className="flex h-screen">
-            <div className="w-1/3 overflow-y-auto">
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column'
+
+        }}>
+            <div style={{flex: 1}}>
                 {/* Left Pane: Categories and Actions */}
           {welcome}
                 {Object.entries(categories).map(([categoryName, actions], index) => (
@@ -124,11 +128,11 @@ const App = () => {
                     />
                 ))}
             </div>
-            <div className="w-1/3">
+            <div style={{flex: 1}}>
                 {/* Center Pane: Chat Dialog */}
                 <ChatDialog />
             </div>
-            <div className="w-1/3">
+            <div style={{flex: 1}}>
                 {/* Right Pane: Preview */}
                 <Preview />
             </div>
