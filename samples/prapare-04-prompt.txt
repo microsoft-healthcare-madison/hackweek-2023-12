@@ -1,0 +1,3 @@
+For question 2, is there an existing set of LOINC codes that can be used to represent the data?  
+If so, please provide the JSON of the FHIR Questionnaire Item as Coding options with their LOINC codes.
+If there is not a good match and there is not an Unknown code, do not invent one - label that data with a code of NotFound.

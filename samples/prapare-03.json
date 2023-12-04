@@ -1,0 +1,315 @@
+{
+    "resourceType": "Questionnaire",
+    "url": "<uri-of-the-questionnaire>",
+    "title": "PRAPARE Questionnaire",
+    "status": "active",
+    "subjectType": [
+        "Patient"
+    ],
+    "date": "<date-of-creation>",
+    "publisher": "National Association of Community Health Centers, Inc.",
+    "item": [
+        {
+            "linkId": "1",
+            "text": "Are you Hispanic or Latino?",
+            "type": "boolean",
+            "required": false,
+            "repeats": false
+        },
+        {
+            "linkId": "2",
+            "text": "Which race(s) are you? Check all that apply.",
+            "type": "string",
+            "required": false,
+            "repeats": true,
+            "answerOption": [
+                {
+                    "valueString": "Asian"
+                },
+                {
+                    "valueString": "Native Hawaiian"
+                },
+                {
+                    "valueString": "Pacific Islander"
+                },
+                {
+                    "valueString": "Black/African American"
+                },
+                {
+                    "valueString": "White"
+                },
+                {
+                    "valueString": "American Indian/Alaskan Native"
+                },
+                {
+                    "valueString": "Other"
+                }
+            ]
+        },
+        {
+            "linkId": "3",
+            "text": "At any point in the past 2 years, has season or migrant farm work been your or your family’s main source of income?",
+            "type": "boolean",
+            "required": false,
+            "repeats": false
+        },
+        {
+            "linkId": "4",
+            "text": "Have you been discharged from the armed forces of the United States?",
+            "type": "boolean",
+            "required": false,
+            "repeats": false
+        },
+        {
+            "linkId": "5",
+            "text": "What language are you most comfortable speaking?",
+            "type": "string",
+            "required": false,
+            "repeats": false
+        },
+        {
+            "linkId": "6",
+            "text": "How many family members, including yourself, do you currently live with?",
+            "type": "integer",
+            "required": false,
+            "repeats": false
+        },
+        {
+            "linkId": "7",
+            "text": "What is your housing situation today?",
+            "type": "string",
+            "required": false,
+            "repeats": false,
+            "answerOption": [
+                {
+                    "valueString": "I have housing"
+                },
+                {
+                    "valueString": "I do not have housing (staying with others, in a hotel, in a shelter, living outside on the street, on a beach, in a car, or in a park)"
+                }
+            ]
+        },
+        {
+            "linkId": "8",
+            "text": "Within the past year, have you or any family members you live with been unable to get any of the following when it was really needed? (Check all that apply)",
+            "type": "string",
+            "required": false,
+            "repeats": true,
+            "answerOption": [
+                {
+                    "valueString": "Food"
+                },
+                {
+                    "valueString": "Clothing"
+                },
+                {
+                    "valueString": "Utilities"
+                },
+                {
+                    "valueString": "Childcare"
+                },
+                {
+                    "valueString": "Medicine/medical care"
+                },
+                {
+                    "valueString": "Phone"
+                },
+                {
+                    "valueString": "Any other basic needs"
+                }
+            ]
+        },
+        {
+            "linkId": "9",
+            "text": "In the past year, have you been afraid of your partner or ex-partner?",
+            "type": "boolean",
+            "required": false,
+            "repeats": false
+        },
+        {
+            "linkId": "10",
+            "text": "Do you feel physically and emotionally safe where you currently live?",
+            "type": "boolean",
+            "required": false,
+            "repeats": false
+        },
+        {
+            "linkId": "11",
+            "text": "Within the past year, has lack of transportation kept you from medical appointments, meetings, work, or from getting things needed for daily living?",
+            "type": "boolean",
+            "required": false,
+            "repeats": false
+        },
+        {
+            "linkId": "12",
+            "text": "Are you worried about losing your housing?",
+            "type": "boolean",
+            "required": false,
+            "repeats": false
+        },
+        {
+            "linkId": "13",
+            "text": "Is there a time when you didn't have health insurance?",
+            "type": "boolean",
+            "required": false,
+            "repeats": false
+        },
+        {
+            "linkId": "14",
+            "text": "In the past year, have you or any family members you live with been unable to get any of the following when it was really needed? (Check all that apply)",
+            "type": "string",
+            "required": false,
+            "repeats": true,
+            "answerOption": [
+                {
+                    "valueString": "Food"
+                },
+                {
+                    "valueString": "Clothing"
+                },
+                {
+                    "valueString": "Utilities"
+                },
+                {
+                    "valueString": "Childcare"
+                },
+                {
+                    "valueString": "Medicine/medical care"
+                },
+                {
+                    "valueString": "Phone"
+                },
+                {
+                    "valueString": "Any other basic needs"
+                }
+            ]
+        },
+        {
+            "linkId": "15",
+            "text": "Do you have more than one person you can turn to for support when feeling stressed, sad, or down?",
+            "type": "boolean",
+            "required": false,
+            "repeats": false
+        },
+        {
+            "linkId": "16",
+            "text": "How often do you see or talk to people that you care about and feel close to? (For example: talking to friends on the phone, visiting friends or family, going to church or club meetings)",
+            "type": "string",
+            "required": false,
+            "repeats": false,
+            "answerOption": [
+                {
+                    "valueString": "Every day"
+                },
+                {
+                    "valueString": "Several times a week"
+                },
+                {
+                    "valueString": "Several times a month"
+                },
+                {
+                    "valueString": "Once a month"
+                },
+                {
+                    "valueString": "Less than once a month"
+                }
+            ]
+        },
+        {
+            "linkId": "17",
+            "text": "Stress is when someone feels tense, nervous, anxious, or can't sleep at night because their mind is troubled. How stressed are you?",
+            "type": "string",
+            "required": false,
+            "repeats": false,
+            "answerOption": [
+                {
+                    "valueString": "Not at all"
+                },
+                {
+                    "valueString": "A little bit"
+                },
+                {
+                    "valueString": "Somewhat"
+                },
+                {
+                    "valueString": "Quite a bit"
+                },
+                {
+                    "valueString": "Very much"
+                }
+            ]
+        },
+        {
+            "linkId": "18",
+            "text": "In general, how would you rate your physical health?",
+            "type": "string",
+            "required": false,
+            "repeats": false,
+            "answerOption": [
+                {
+                    "valueString": "Excellent"
+                },
+                {
+                    "valueString": "Very good"
+                },
+                {
+                    "valueString": "Good"
+                },
+                {
+                    "valueString": "Fair"
+                },
+                {
+                    "valueString": "Poor"
+                }
+            ]
+        },
+        {
+            "linkId": "19",
+            "text": "In general, how would you rate your mental health, including your mood and your ability to think?",
+            "type": "string",
+            "required": false,
+            "repeats": false,
+            "answerOption": [
+                {
+                    "valueString": "Excellent"
+                },
+                {
+                    "valueString": "Very good"
+                },
+                {
+                    "valueString": "Good"
+                },
+                {
+                    "valueString": "Fair"
+                },
+                {
+                    "valueString": "Poor"
+                }
+            ]
+        },
+        {
+            "linkId": "20",
+            "text": "In general, how would you rate your dental health?",
+            "type": "string",
+            "required": false,
+            "repeats": false,
+            "answerOption": [
+                {
+                    "valueString": "Excellent"
+                },
+                {
+                    "valueString": "Very good"
+                },
+                {
+                    "valueString": "Good"
+                },
+                {
+                    "valueString": "Fair"
+                },
+                {
+                    "valueString": "Poor"
+                }
+            ]
+        }
+    ]
+}
