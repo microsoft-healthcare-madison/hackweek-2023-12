@@ -92,7 +92,7 @@ const schema = `{
  * @param {string} formText
  */
 export async function generate(client, formText) {
-    return {json: {"resourceType":"Questionnaire","id":"personalCharacteristics","title":"Personal Characteristics","status":"active","subjectType":["Patient"],"date":"2023-04-01","item":[{"linkId":"1","text":"Are you Hispanic or Latino?","type":"choice","required":false,"repeats":false,"answerOption":[{"valueString":"Yes"},{"valueString":"No"},{"valueString":"I choose not to answer this question"}]},{"linkId":"2","text":"Which race(s) are you? Check all that apply","type":"choice","required":false,"repeats":true,"answerOption":[{"valueString":"Asian"},{"valueString":"Native Hawaiian"},{"valueString":"Pacific Islander"},{"valueString":"Black/African American"},{"valueString":"White"},{"valueString":"American Indian/Alaskan Native"},{"valueString":"Other"},{"valueString":"I choose not to answer this question"}]},{"linkId":"3","text":"At any point in the past 2 years, has season or migrant farm work been your or your family's main source of income?","type":"choice","required":false,"repeats":false,"answerOption":[{"valueString":"Yes"},{"valueString":"No"},{"valueString":"I choose not to answer this question"}]},{"linkId":"4","text":"Have you been discharged from the armed forces of the United States?","type":"choice","required":false,"repeats":false,"answerOption":[{"valueString":"Yes"},{"valueString":"No"},{"valueString":"I choose not to answer this question"}]},{"linkId":"5","text":"What language are you most comfortable speaking?","type":"string","required":false,"repeats":false},{"linkId":"6","text":"How many family members, including yourself, do you currently live with?","type":"integer","required":false,"repeats":false},{"linkId":"7","text":"What is your housing situation today?","type":"choice","required":false,"repeats":false,"answerOption":[{"valueString":"I have housing"},{"valueString":"I do not have housing (staying with others, in a hotel, in a shelter, living outside on the street, on a beach, in a car, or in a park)"},{"valueString":"I choose not to answer this question"}]}]}}
+    if (false) return {json: {"resourceType":"Questionnaire","id":"personalCharacteristics","title":"Personal Characteristics","status":"active","subjectType":["Patient"],"date":"2023-04-01","item":[{"linkId":"1","text":"Are you Hispanic or Latino?","type":"choice","required":false,"repeats":false,"answerOption":[{"valueString":"Yes"},{"valueString":"No"},{"valueString":"I choose not to answer this question"}]},{"linkId":"2","text":"Which race(s) are you? Check all that apply","type":"choice","required":false,"repeats":true,"answerOption":[{"valueString":"Asian"},{"valueString":"Native Hawaiian"},{"valueString":"Pacific Islander"},{"valueString":"Black/African American"},{"valueString":"White"},{"valueString":"American Indian/Alaskan Native"},{"valueString":"Other"},{"valueString":"I choose not to answer this question"}]},{"linkId":"3","text":"At any point in the past 2 years, has season or migrant farm work been your or your family's main source of income?","type":"choice","required":false,"repeats":false,"answerOption":[{"valueString":"Yes"},{"valueString":"No"},{"valueString":"I choose not to answer this question"}]},{"linkId":"4","text":"Have you been discharged from the armed forces of the United States?","type":"choice","required":false,"repeats":false,"answerOption":[{"valueString":"Yes"},{"valueString":"No"},{"valueString":"I choose not to answer this question"}]},{"linkId":"5","text":"What language are you most comfortable speaking?","type":"string","required":false,"repeats":false},{"linkId":"6","text":"How many family members, including yourself, do you currently live with?","type":"integer","required":false,"repeats":false},{"linkId":"7","text":"What is your housing situation today?","type":"choice","required":false,"repeats":false,"answerOption":[{"valueString":"I have housing"},{"valueString":"I do not have housing (staying with others, in a hotel, in a shelter, living outside on the street, on a beach, in a car, or in a park)"},{"valueString":"I choose not to answer this question"}]}]}}
     let messages = [
     {
         role: "system",
@@ -124,7 +124,8 @@ Respond with a FHIR JSON Questionnaire object.`
     let initialJson;
     do {
         let response = await client.chat.completions.create({
-            model: "gpt-4-1106-preview",
+            // model: "gpt-4-1106-preview",
+             model: "gpt-3.5-turbo-1106",
             temperature: 1.0,
             response_format: {type:'json_object'},
             messages
@@ -396,11 +397,13 @@ interface Response {
         }[]
     }[]
 }
+
 Respond with a JSON Response object.`
       },
     ]
         let response = await client.chat.completions.create({
-            model: 'gpt-4-1106-preview',
+            // model: 'gpt-4-1106-preview',
+            model: "gpt-3.5-turbo-1106",
             temperature: 1.0,
             response_format: {type:'json_object'},
             messages

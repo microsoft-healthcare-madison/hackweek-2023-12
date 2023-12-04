@@ -17,15 +17,14 @@ let client = new OpenAI({
 })
 
 // ActionItem Component
-const ActionItem = ({ action, onApply, onAdjust, onIgnore }) => {
+const ActionItem = ({ categoryName, action, onApply, onIgnore }) => {
     return (
         <div>
             <div>{action.label}</div>
             <div>{JSON.stringify(action.patch)}</div>
             <div>
-                <button onClick={() => onApply(action)} className="px-2 py-1 mr-1 bg-green-500 text-white rounded">Apply</button>
-                <button onClick={() => onAdjust(action)} className="px-2 py-1 mr-1 bg-blue-500 text-white rounded">Adjust</button>
-                <button onClick={() => onIgnore(action)} className="px-2 py-1 bg-red-500 text-white rounded">Ignore</button>
+                <button onClick={() => onApply(action, categoryName)} className="px-2 py-1 mr-1 bg-green-500 text-white rounded">Apply</button>
+                <button onClick={() => onIgnore(action, categoryName)} className="px-2 py-1 bg-red-500 text-white rounded">Ignore</button>
             </div>
         </div>
     );
@@ -40,8 +39,8 @@ const Category = ({ categoryName, actions, onAction }) => {
                 <ActionItem
                     key={index}
                     action={action}
+                    categoryName={categoryName}
                     onApply={onAction.apply}
-                    onAdjust={onAction.adjust}
                     onIgnore={onAction.ignore}
                 />
             ))}
@@ -112,8 +111,15 @@ const App = () => {
         })()
     }, [startingForm])
 
+    function removeAction(action, categoryName) {
+        setCategories({
+            ...categories,
+            [categoryName]: categories[categoryName].filter(a => a !== action)
+        })
+
+    }
     const handleAction = {
-        apply: (action) => {
+        apply: (action, categoryName) => {
             console.log("Action", action)
             const newItem = jsonpatch.apply_patch(questionnaire.item.find(i => i.linkId === action.linkId), action.patch)
             console.log("Applied patch", newItem)
@@ -126,9 +132,11 @@ const App = () => {
                     return i
                 })
             })
+            removeAction(action, categoryName)
         },
-        adjust: (action) => console.log("Adjust", action),
-        ignore: (action) => console.log("Ignore", action)
+        ignore: (action, categoryName) => {
+            removeAction(action, categoryName)
+        }
     };
 
     return startingForm ? (
