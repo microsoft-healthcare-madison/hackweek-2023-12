@@ -31,3 +31,10 @@ stateDiagram
 * Day 2: Auto-populating items based on EHR data
 
 * Day 3: UX for filling forms (with auto-population assistance)
+
+
+---
+
+Discovered issues / open problems
+
+* Processing of form text is often cut off with comments like "// additional items in same format".

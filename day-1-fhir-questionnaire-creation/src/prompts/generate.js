@@ -92,7 +92,8 @@ const schema = `{
  * @param {string} formText
  */
 export async function generate(client, formText) {
-    const messages = [
+    return {json: {"resourceType":"Questionnaire","id":"personalCharacteristics","title":"Personal Characteristics","status":"active","subjectType":["Patient"],"date":"2023-04-01","item":[{"linkId":"1","text":"Are you Hispanic or Latino?","type":"choice","required":false,"repeats":false,"answerOption":[{"valueString":"Yes"},{"valueString":"No"},{"valueString":"I choose not to answer this question"}]},{"linkId":"2","text":"Which race(s) are you? Check all that apply","type":"choice","required":false,"repeats":true,"answerOption":[{"valueString":"Asian"},{"valueString":"Native Hawaiian"},{"valueString":"Pacific Islander"},{"valueString":"Black/African American"},{"valueString":"White"},{"valueString":"American Indian/Alaskan Native"},{"valueString":"Other"},{"valueString":"I choose not to answer this question"}]},{"linkId":"3","text":"At any point in the past 2 years, has season or migrant farm work been your or your family's main source of income?","type":"choice","required":false,"repeats":false,"answerOption":[{"valueString":"Yes"},{"valueString":"No"},{"valueString":"I choose not to answer this question"}]},{"linkId":"4","text":"Have you been discharged from the armed forces of the United States?","type":"choice","required":false,"repeats":false,"answerOption":[{"valueString":"Yes"},{"valueString":"No"},{"valueString":"I choose not to answer this question"}]},{"linkId":"5","text":"What language are you most comfortable speaking?","type":"string","required":false,"repeats":false},{"linkId":"6","text":"How many family members, including yourself, do you currently live with?","type":"integer","required":false,"repeats":false},{"linkId":"7","text":"What is your housing situation today?","type":"choice","required":false,"repeats":false,"answerOption":[{"valueString":"I have housing"},{"valueString":"I do not have housing (staying with others, in a hotel, in a shelter, living outside on the street, on a beach, in a car, or in a park)"},{"valueString":"I choose not to answer this question"}]}]}}
+    let messages = [
     {
         role: "system",
         content:
@@ -123,16 +124,19 @@ Respond with a FHIR JSON Questionnaire object.`
     let initialJson;
     do {
         let response = await client.chat.completions.create({
-            model: "gpt-3.5-turbo-1106",
+            model: "gpt-4-1106-preview",
             temperature: 1.0,
             response_format: {type:'json_object'},
             messages
         });
-
         initialJson = JSON.parse(response.choices[0].message.content);
         validationResponse = await validate(initialJson);
+        if (attempts > 0) {
+            messages = messages.slice(0, -2)
+        }
         attempts++
-        messages.push({role: "user", content: `Here is the validation result for that resoure:
+        messages.push({role: "system", content: JSON.stringify(initialJson)})
+        messages.push({role: "user", content: `Here is the validation result for your resoure:
 ${"```json"}
 ${JSON.stringify(validationResponse, null, 2)}
 ${"```"}
@@ -171,6 +175,189 @@ async function validate(r) {
  */
 
 export async function refine(client, questionnaire) {
+    console.log("Refining", questionnaire.item)
+    if (false) return {categories: [
+    {
+        "title": "Inclusive Language",
+        "suggestions": [
+            {
+                "label": "Clarify 'Hispanic or Latino'",
+                "linkId": "1",
+                "patch": [
+                    {
+                        "op": "replace",
+                        "path": "/text",
+                        "value": "Do you identify as Hispanic, Latino/a, or of Spanish origin?"
+                    }
+                ]
+            },
+            {
+                "label": "Add 'Decline to State' option",
+                "linkId": "2",
+                "patch": [
+                    {
+                        "op": "replace",
+                        "path": "/answerOption/7/valueString",
+                        "value": "Decline to State"
+                    }
+                ]
+            },
+            {
+                "label": "Revise 'Discharged from armed forces' text",
+                "linkId": "4",
+                "patch": [
+                    {
+                        "op": "replace",
+                        "path": "/text",
+                        "value": "Have you served in the armed forces of the United States?"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "title": "Ambiguous Language",
+        "suggestions": [
+            {
+                "label": "Define 'family member'",
+                "linkId": "6",
+                "patch": [
+                    {
+                        "op": "add",
+                        "path": "/text",
+                        "value": "How many individuals, including yourself, do you currently live with? Please include those you consider family members."
+                    }
+                ]
+            },
+            {
+                "label": "Clarify 'I have housing'",
+                "linkId": "7",
+                "patch": [
+                    {
+                        "op": "replace",
+                        "path": "/answerOption/0/valueString",
+                        "value": "I have stable housing"
+                    }
+                ]
+            },
+            {
+                "label": "Detail 'I do not have housing' options",
+                "linkId": "7",
+                "patch": [
+                    {
+                        "op": "replace",
+                        "path": "/answerOption/1/valueString",
+                        "value": "I do not have stable housing (e.g., staying with others, in a hotel, in a shelter, living outside)"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "title": "Missing Questions",
+        "suggestions": [
+            {
+                "label": "Add 'Gender Identity' question",
+                "linkId": "end",
+                "patch": [
+                    {
+                        "op": "add",
+                        "path": "/-",
+                        "value": {
+                            "linkId": "8",
+                            "text": "What is your gender identity?",
+                            "type": "choice",
+                            "required": false,
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueString": "Male"
+                                },
+                                {
+                                    "valueString": "Female"
+                                },
+                                {
+                                    "valueString": "Transgender"
+                                },
+                                {
+                                    "valueString": "Non-Binary"
+                                },
+                                {
+                                    "valueString": "Prefer to self-describe:_____"
+                                },
+                                {
+                                    "valueString": "Prefer not to say"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                "label": "Add 'Sexual Orientation' question",
+                "linkId": "end",
+                "patch": [
+                    {
+                        "op": "add",
+                        "path": "/-",
+                        "value": {
+                            "linkId": "9",
+                            "text": "What is your sexual orientation?",
+                            "type": "choice",
+                            "required": false,
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueString": "Heterosexual (straight)"
+                                },
+                                {
+                                    "valueString": "Homosexual (gay or lesbian)"
+                                },
+                                {
+                                    "valueString": "Bisexual"
+                                },
+                                {
+                                    "valueString": "Other"
+                                },
+                                {
+                                    "valueString": "Prefer not to say"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                "label": "Add 'Disability Status' question",
+                "linkId": "end",
+                "patch": [
+                    {
+                        "op": "add",
+                        "path": "/-",
+                        "value": {
+                            "linkId": "10",
+                            "text": "Do you consider yourself to have a disability?",
+                            "type": "choice",
+                            "required": false,
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueString": "Yes"
+                                },
+                                {
+                                    "valueString": "No"
+                                },
+                                {
+                                    "valueString": "Prefer not to say"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+]}
     const messages = [
     {
         role: "system",
@@ -184,25 +371,28 @@ ${"```"}
 ${JSON.stringify(questionnaire.item, null, 2)}
 ${"```"}
 
-Please ouptut 3 categories of things I can improve in this questionnaire, with 2+
-suggestions in each category. Here are some ideas about where to start:
+Now output any high-impact suggestions you might have for the following
+categories:
 
-* Wording / language / clarity / inclusiveness
-* Missing items we should ask about
-* Logic like enableWhen that we should include
+* Inclusive Language
+* Ambiguous Language
+* Other
 
-But use your own judgment to come up with categories based on the content you observe.
+The suggestions within each category need to be specific. Each will have a user-facing label that explains the full change, and a JSON Patch expression that implements the suggestion.
 
 Your response is a JSON object following this Response interface
 
 interface Response {
     categories: {
-        shortTitle: string,
-        suggestions: {
-            text: string,
-            type: "AddItem" |  "EditItemText",
-            itemLinkId: string.
-            itemText: string?
+        title: string, // Very short category label
+        suggestions: { // each suggestion can only patch a single existing Questionnaire Item
+            label: string, // brief user-facing label for this suggestion that describes the full change. User will make decisions based on this
+            linkId: string, // which item to modify
+            patch: { // applies directly to the item with the linkId specified
+                op: "add" | "remove" | "replace",
+                path?: string, // path within the item
+                value?: string
+            }[] // RFC6902 JSON Patch array, patching the item with the specified linkId
         }[]
     }[]
 }

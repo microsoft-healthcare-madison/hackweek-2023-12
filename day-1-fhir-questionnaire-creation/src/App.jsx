@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { SmartFormsRenderer, getResponse } from '@aehrc/smart-forms-renderer';
 import './App.css'
+import jsonpatch from "jsonpatch";
 
 
 import {generate, refine } from './prompts/generate'
@@ -18,8 +19,9 @@ let client = new OpenAI({
 // ActionItem Component
 const ActionItem = ({ action, onApply, onAdjust, onIgnore }) => {
     return (
-        <div className="flex items-center justify-between p-2 border-b">
-            <div>{action.name}</div>
+        <div>
+            <div>{action.label}</div>
+            <div>{JSON.stringify(action.patch)}</div>
             <div>
                 <button onClick={() => onApply(action)} className="px-2 py-1 mr-1 bg-green-500 text-white rounded">Apply</button>
                 <button onClick={() => onAdjust(action)} className="px-2 py-1 mr-1 bg-blue-500 text-white rounded">Adjust</button>
@@ -84,10 +86,12 @@ const Preview = (props) => {
 // Main App Component
 const App = () => {
     // Sample categories and actions
-    const categories = {
-        "Category 1": [{ name: "Action 1.1" }, { name: "Action 1.2" }],
-        "Category 2": [{ name: "Action 2.1" }, { name: "Action 2.2" }]
-    };
+    // const categories = {
+    //     "Category 1": [{ name: "Action 1.1" }, { name: "Action 1.2" }],
+    //     "Category 2": [{ name: "Action 2.1" }, { name: "Action 2.2" }]
+    // };
+
+    const [categories, setCategories] = useState([])
 
     const [welcome, setWelcome] = useState("Welcome Message...")
     const [startingForm, setStartingForm] = useState(null);
@@ -101,13 +105,28 @@ const App = () => {
             const result = await  generate(client, startingForm);
             console.log("Result", result)
             setQuestionnaire(result.json)
-            const refineIdeas = await refine(client, questionnaire)
-            
+            const refineIdeas = await refine(client, result.json)
+            setCategories(Object.fromEntries(refineIdeas.categories.map(c => ([
+                c.title, c.suggestions
+            ]))))
         })()
     }, [startingForm])
 
     const handleAction = {
-        apply: (action) => console.log("Apply", action),
+        apply: (action) => {
+            console.log("Action", action)
+            const newItem = jsonpatch.apply_patch(questionnaire.item.find(i => i.linkId === action.linkId), action.patch)
+            console.log("Applied patch", newItem)
+            setQuestionnaire({
+                ...questionnaire,
+                item: questionnaire.item.map(i => {
+                    if (action.linkId === i.linkId) {
+                        return newItem
+                    }
+                    return i
+                })
+            })
+        },
         adjust: (action) => console.log("Adjust", action),
         ignore: (action) => console.log("Ignore", action)
     };
@@ -115,12 +134,11 @@ const App = () => {
     return startingForm ? (
         <div style={{
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'row'
 
         }}>
             <div style={{flex: 1}}>
                 {/* Left Pane: Categories and Actions */}
-          {welcome}
                 {Object.entries(categories).map(([categoryName, actions], index) => (
                     <Category
                         key={index}
