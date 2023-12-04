@@ -85,25 +85,23 @@ const schema = `{
     }],
     "item" : [{ Content as for Questionnaire.item }] // Nested questionnaire items
   }]
-}`
+}`;
 /**
  *
  * @param {OpenAI} client
  * @param {string} formText
  */
 export async function generate(client, formText) {
-    if (false) return {json: {"resourceType":"Questionnaire","id":"personalCharacteristics","title":"Personal Characteristics","status":"active","subjectType":["Patient"],"date":"2023-04-01","item":[{"linkId":"1","text":"Are you Hispanic or Latino?","type":"choice","required":false,"repeats":false,"answerOption":[{"valueString":"Yes"},{"valueString":"No"},{"valueString":"I choose not to answer this question"}]},{"linkId":"2","text":"Which race(s) are you? Check all that apply","type":"choice","required":false,"repeats":true,"answerOption":[{"valueString":"Asian"},{"valueString":"Native Hawaiian"},{"valueString":"Pacific Islander"},{"valueString":"Black/African American"},{"valueString":"White"},{"valueString":"American Indian/Alaskan Native"},{"valueString":"Other"},{"valueString":"I choose not to answer this question"}]},{"linkId":"3","text":"At any point in the past 2 years, has season or migrant farm work been your or your family's main source of income?","type":"choice","required":false,"repeats":false,"answerOption":[{"valueString":"Yes"},{"valueString":"No"},{"valueString":"I choose not to answer this question"}]},{"linkId":"4","text":"Have you been discharged from the armed forces of the United States?","type":"choice","required":false,"repeats":false,"answerOption":[{"valueString":"Yes"},{"valueString":"No"},{"valueString":"I choose not to answer this question"}]},{"linkId":"5","text":"What language are you most comfortable speaking?","type":"string","required":false,"repeats":false},{"linkId":"6","text":"How many family members, including yourself, do you currently live with?","type":"integer","required":false,"repeats":false},{"linkId":"7","text":"What is your housing situation today?","type":"choice","required":false,"repeats":false,"answerOption":[{"valueString":"I have housing"},{"valueString":"I do not have housing (staying with others, in a hotel, in a shelter, living outside on the street, on a beach, in a car, or in a park)"},{"valueString":"I choose not to answer this question"}]}]}}
-    let messages = [
+  let messages = [
     {
-        role: "system",
-        content:
-          `You are a clinical informatics assistant familiar with FHIR. You know the full Questionnaire data model:
+      role: "system",
+      content: `You are a clinical informatics assistant familiar with FHIR. You know the full Questionnaire data model:
 ${schema}
 `,
-      },
-      {
-        role: "user",
-        content: `Please turn the following free-text form into a FHIR Questionnaire.
+    },
+    {
+      role: "user",
+      content: `Please turn the following free-text form into a FHIR Questionnaire.
         
 * Do not invent "Codings"; just use strings if there is no specified standardized code
 * Populate linkIds enableWhen, etc.
@@ -114,60 +112,73 @@ ${"```"}
 ${formText}
 ${"```"}
 
-Respond with a FHIR JSON Questionnaire object.`
-      },
-    ]
+Respond with a FHIR JSON Questionnaire object.`,
+    },
+  ];
 
-    let validationResponse;
-    const MAX_ATTEMPTS = 3;
-    let attempts = 0;
-    let initialJson;
-    do {
-        let response = await client.chat.completions.create({
-            // model: "gpt-4-1106-preview",
-             model: "gpt-3.5-turbo-1106",
-            temperature: 1.0,
-            response_format: {type:'json_object'},
-            messages
-        });
-        initialJson = JSON.parse(response.choices[0].message.content);
-        validationResponse = await validate(initialJson);
-        if (attempts > 0) {
-            messages = messages.slice(0, -2)
-        }
-        attempts++
-        messages.push({role: "system", content: JSON.stringify(initialJson)})
-        messages.push({role: "user", content: `Here is the validation result for your resoure:
+  let validationResponse;
+  const MAX_ATTEMPTS = 3;
+  let attempts = 0;
+  let initialJson;
+  do {
+    let response = await client.chat.completions.create({
+      // model: "gpt-4-1106-preview",
+      model: "gpt-3.5-turbo-1106",
+      temperature: 1.0,
+      response_format: { type: "json_object" },
+      messages,
+    });
+    initialJson = JSON.parse(response.choices[0].message.content);
+    validationResponse = await validate(initialJson);
+    if (attempts > 0) {
+      messages = messages.slice(0, -2);
+    }
+    attempts++;
+    messages.push({ role: "system", content: JSON.stringify(initialJson) });
+    messages.push({
+      role: "user",
+      content: `Here is the validation result for your resoure:
 ${"```json"}
 ${JSON.stringify(validationResponse, null, 2)}
 ${"```"}
 
 Please fix any errors.
-`})
-        console.log("Attempt", attempts, initialJson)
-        console.log(validationResponse)
-    } while (attempts < MAX_ATTEMPTS && validationResponse.issue.some(i => ["fatal", "error"].includes(i.severity)))
+`,
+    });
+    console.log("Attempt", attempts, initialJson);
+    console.log(validationResponse);
+  } while (
+    attempts < MAX_ATTEMPTS &&
+    validationResponse.issue.some((i) =>
+      ["fatal", "error"].includes(i.severity)
+    )
+  );
 
-    return  {
-        validation: validationResponse,
-        json: initialJson
-    }
+  return {
+    validation: validationResponse,
+    json: initialJson,
+  };
 }
 
 async function validate(r) {
-    const result = await fetch('https://hapi.fhir.org/baseR4/Questionnaire/$validate', {
-        method: 'POST',
-        headers: {
-            "content-type": "application/json+fhir",
-            "accept": "application/json+fhir"
-        },
-        body: JSON.stringify(r)
-    })
+  const result = await fetch(
+    "https://hapi.fhir.org/baseR4/Questionnaire/$validate",
+    {
+      method: "POST",
+      headers: {
+        "content-type": "application/json+fhir",
+        accept: "application/json+fhir",
+      },
+      body: JSON.stringify(r),
+    }
+  );
 
-    const resultJson = await result.json()
-    delete resultJson.text
-    resultJson.issue = resultJson.issue.filter(i => !i.diagnostics.match("dom-6"))
-    return resultJson
+  const resultJson = await result.json();
+  delete resultJson.text;
+  resultJson.issue = resultJson.issue.filter(
+    (i) => !i.diagnostics.match("dom-6")
+  );
+  return resultJson;
 }
 /**
  *
@@ -176,198 +187,15 @@ async function validate(r) {
  */
 
 export async function refine(client, questionnaire) {
-    console.log("Refining", questionnaire.item)
-    if (false) return {categories: [
+  console.log("Refining", questionnaire.item);
+  const messages = [
     {
-        "title": "Inclusive Language",
-        "suggestions": [
-            {
-                "label": "Clarify 'Hispanic or Latino'",
-                "linkId": "1",
-                "patch": [
-                    {
-                        "op": "replace",
-                        "path": "/text",
-                        "value": "Do you identify as Hispanic, Latino/a, or of Spanish origin?"
-                    }
-                ]
-            },
-            {
-                "label": "Add 'Decline to State' option",
-                "linkId": "2",
-                "patch": [
-                    {
-                        "op": "replace",
-                        "path": "/answerOption/7/valueString",
-                        "value": "Decline to State"
-                    }
-                ]
-            },
-            {
-                "label": "Revise 'Discharged from armed forces' text",
-                "linkId": "4",
-                "patch": [
-                    {
-                        "op": "replace",
-                        "path": "/text",
-                        "value": "Have you served in the armed forces of the United States?"
-                    }
-                ]
-            }
-        ]
+      role: "system",
+      content: `You are a clinical informatics assistant familiar with FHIR. You know the Questionnaire resource is ${schema}`,
     },
     {
-        "title": "Ambiguous Language",
-        "suggestions": [
-            {
-                "label": "Define 'family member'",
-                "linkId": "6",
-                "patch": [
-                    {
-                        "op": "add",
-                        "path": "/text",
-                        "value": "How many individuals, including yourself, do you currently live with? Please include those you consider family members."
-                    }
-                ]
-            },
-            {
-                "label": "Clarify 'I have housing'",
-                "linkId": "7",
-                "patch": [
-                    {
-                        "op": "replace",
-                        "path": "/answerOption/0/valueString",
-                        "value": "I have stable housing"
-                    }
-                ]
-            },
-            {
-                "label": "Detail 'I do not have housing' options",
-                "linkId": "7",
-                "patch": [
-                    {
-                        "op": "replace",
-                        "path": "/answerOption/1/valueString",
-                        "value": "I do not have stable housing (e.g., staying with others, in a hotel, in a shelter, living outside)"
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "title": "Missing Questions",
-        "suggestions": [
-            {
-                "label": "Add 'Gender Identity' question",
-                "linkId": "end",
-                "patch": [
-                    {
-                        "op": "add",
-                        "path": "/-",
-                        "value": {
-                            "linkId": "8",
-                            "text": "What is your gender identity?",
-                            "type": "choice",
-                            "required": false,
-                            "repeats": false,
-                            "answerOption": [
-                                {
-                                    "valueString": "Male"
-                                },
-                                {
-                                    "valueString": "Female"
-                                },
-                                {
-                                    "valueString": "Transgender"
-                                },
-                                {
-                                    "valueString": "Non-Binary"
-                                },
-                                {
-                                    "valueString": "Prefer to self-describe:_____"
-                                },
-                                {
-                                    "valueString": "Prefer not to say"
-                                }
-                            ]
-                        }
-                    }
-                ]
-            },
-            {
-                "label": "Add 'Sexual Orientation' question",
-                "linkId": "end",
-                "patch": [
-                    {
-                        "op": "add",
-                        "path": "/-",
-                        "value": {
-                            "linkId": "9",
-                            "text": "What is your sexual orientation?",
-                            "type": "choice",
-                            "required": false,
-                            "repeats": false,
-                            "answerOption": [
-                                {
-                                    "valueString": "Heterosexual (straight)"
-                                },
-                                {
-                                    "valueString": "Homosexual (gay or lesbian)"
-                                },
-                                {
-                                    "valueString": "Bisexual"
-                                },
-                                {
-                                    "valueString": "Other"
-                                },
-                                {
-                                    "valueString": "Prefer not to say"
-                                }
-                            ]
-                        }
-                    }
-                ]
-            },
-            {
-                "label": "Add 'Disability Status' question",
-                "linkId": "end",
-                "patch": [
-                    {
-                        "op": "add",
-                        "path": "/-",
-                        "value": {
-                            "linkId": "10",
-                            "text": "Do you consider yourself to have a disability?",
-                            "type": "choice",
-                            "required": false,
-                            "repeats": false,
-                            "answerOption": [
-                                {
-                                    "valueString": "Yes"
-                                },
-                                {
-                                    "valueString": "No"
-                                },
-                                {
-                                    "valueString": "Prefer not to say"
-                                }
-                            ]
-                        }
-                    }
-                ]
-            }
-        ]
-    }
-]}
-    const messages = [
-    {
-        role: "system",
-        content:
-          `You are a clinical informatics assistant familiar with FHIR. You know the Questionnaire resource is ${schema}`,
-      },
-      {
-        role: "user",
-        content: `I have a draft of a FHIR Questionnaire Items Array:
+      role: "user",
+      content: `I have a draft of a FHIR Questionnaire Items Array:
 ${"```"}
 ${JSON.stringify(questionnaire.item, null, 2)}
 ${"```"}
@@ -398,20 +226,19 @@ interface Response {
     }[]
 }
 
-Respond with a JSON Response object.`
-      },
-    ]
-        let response = await client.chat.completions.create({
-            // model: 'gpt-4-1106-preview',
-            model: "gpt-3.5-turbo-1106",
-            temperature: 1.0,
-            response_format: {type:'json_object'},
-            messages
-        });
+Respond with a JSON Response object.`,
+    },
+  ];
+  let response = await client.chat.completions.create({
+    // model: 'gpt-4-1106-preview',
+    model: "gpt-3.5-turbo-1106",
+    temperature: 1.0,
+    response_format: { type: "json_object" },
+    messages,
+  });
 
-        let ideas = JSON.parse(response.choices[0].message.content);
-        console.log("IDEAS", ideas)
+  let ideas = JSON.parse(response.choices[0].message.content);
+  console.log("IDEAS", ideas);
 
-    return ideas 
+  return ideas;
 }
-
