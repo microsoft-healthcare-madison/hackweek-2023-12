@@ -30,6 +30,21 @@ stateDiagram
 
 * Day 2: Auto-populating items based on EHR data
 
+```mermaid
+flowchart TD
+    A[Questionnaire] --> C[Break into individual items]
+    subgraph Processing for Each Question
+        D["Generate *keywords* to identify\nCandidate EHR Snippets\n(Alt: Use Embeddings)"]
+        E[Generate *fact model* for abstracting\nCandidate EHR Snippets]
+        D --> F[Abstract all Candidate Snippets into\nfact model]
+        E --> F
+    F --> H[Summarize set of facts into\nPrepopulation Suggestions]
+    end
+    C --> D
+    C --> E
+    H --> I[End]
+```
+
 * Day 3: UX for filling forms (with auto-population assistance)
 
 
