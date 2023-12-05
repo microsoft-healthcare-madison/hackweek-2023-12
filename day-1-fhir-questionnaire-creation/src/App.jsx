@@ -239,9 +239,13 @@ Contacts
         {/* Center Pane: Chat Dialog */}
         <span className="generation-message">{generationMsg}</span>
         <ChatDialog generatingForm={generatingForm} />
-        {/* <span className="rawQuestionnaire">
-          {JSON.stringify(questionnaire, null, 2)}
-        </span> */}
+        {/* <TextField
+        multiline
+        fullWidth
+        minRows={5}
+        maxRows={15}
+        disabled
+        value={JSON.stringify(questionnaire, null, 2)} /> */}
         <button
           onClick={function (e) {
             const qr = questionnaireResponseJson;
