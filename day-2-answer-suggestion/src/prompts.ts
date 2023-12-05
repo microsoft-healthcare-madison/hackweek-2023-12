@@ -1,47 +1,12 @@
 import OpenAI from "openai";
 import { QuestionnaireItem } from "./types";
-import { writeFileSync, readFileSync, existsSync } from "fs";
-import crypto from "crypto";
 import { ChatCompletionMessage } from "openai/resources/index.mjs";
+import { CacheManager } from "./CacheManager";
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
   organization: process.env.OPENAI_API_ORG,
 });
-
-class CacheManager {
-  private cache: Record<string, any>;
-  private cacheFile: string;
-
-  constructor(cacheFile: string) {
-    this.cacheFile = cacheFile;
-    if (existsSync(cacheFile)) {
-      const data = readFileSync(cacheFile, "utf-8");
-      this.cache = JSON.parse(data);
-    } else {
-      this.cache = {};
-    }
-  }
-
-  get(key: string): any {
-    const hashedKey = this.hashKey(key);
-    return this.cache[hashedKey] || null;
-  }
-
-  set(key: string, value: any): void {
-    const hashedKey = this.hashKey(key);
-    this.cache[hashedKey] = value;
-    this.saveCache();
-  }
-
-  private saveCache(): void {
-    writeFileSync(this.cacheFile, JSON.stringify(this.cache, null, 2));
-  }
-
-  private hashKey(key: string): string {
-    return crypto.createHash("sha256").update(key).digest("hex");
-  }
-}
 
 const kwCache = new CacheManager("kwCache.json");
 
@@ -193,12 +158,13 @@ Based on my question, I need a "fact model" and data abstraction instructions fo
 
 * Do not include elements for patient identification; the abstraction team will always be working in the context of a single patient.
 * Account for dates because downstream summarization may depend on them
+* Model components and inputs that can help answer the question even if no direct answer is present in the EHR
 * All elements should be optional if they might ever be missing from the EHR when a fact is being created.
 * If you have several distinct fact types, define FactModel as a disjoint union of those types.
 
 Begin your output with a ${"```typescript"} code block with an interface named FactModel, including dependent interfaces or types. The data abstraction team will create FactModel[] arrays for each chunk of EHR the process, so your FactModel does not need internal arrays.
 
-Provide detailed commentary as instructions for the data abstraction team. They won't see the original question, so include sufficient context to guide them in:
+Provide detailed commentary as instructions for the data abstraction team. They will be working with plain text EHR chunks, so include sufficient context to guide them in:
  * Identifying relevant information.
  * Determining when to create facts and when to discard irrelevant data.
 `,
@@ -224,8 +190,6 @@ export async function ehrChunkToFacts(
   config?: { skipCache: boolean }
 ) {
   if (!config?.skipCache) {
-    let cacheKey = `${instructions}${ehrChunk}`;
-    cacheKey = crypto.createHash("md5").update(cacheKey).digest("hex");
     const cachedResult = factCache.get(instructions + ehrChunk);
     if (cachedResult) {
       return cachedResult;
@@ -276,8 +240,8 @@ export async function createAnswerToQuestion(
   }
 
   const response = await client.chat.completions.create({
-    // model: "gpt-4-1106-preview",
-    model: "gpt-3.5-turbo-1106",
+    model: "gpt-4-1106-preview",
+    // model: "gpt-3.5-turbo-1106",
     temperature: 0.9,
     response_format: { type: "json_object" },
     messages: [

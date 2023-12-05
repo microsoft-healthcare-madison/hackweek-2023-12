@@ -1,0 +1,41 @@
+Histopathology Report
+
+Patient Information:
+
+Name: Carlos Ramirez
+Age: 38
+Gender: Male
+DOB: July 28, 1985
+Patient ID: CR19850728
+Clinical History:
+Carlos Ramirez presented with persistent swelling in the left thigh. He has no significant past medical history and is a non-smoker with occasional alcohol use.
+
+Specimen Information:
+
+Specimen Type: Left Thigh Soft Tissue Biopsy
+Date of Collection: October 10, 2023
+Date of Receipt: October 11, 2023
+Surgeon: Dr. Anita Shah
+Gross Description:
+The specimen is a single fragment of soft tissue, measuring 3.0 x 2.0 x 1.5 cm. The external surface is smooth, and the cut surface is grey-white and firm.
+
+Microscopic Examination:
+Microscopic examination reveals features consistent with a benign lipoma. The tissue is composed of mature adipocytes with uniform nuclei. There are no atypical cells or signs of malignancy.
+
+Special Stains/Tests:
+
+S-100 protein: Positive, indicating nerve tissue involvement.
+MDM2: Negative, ruling out liposarcoma.
+Diagnosis:
+Benign lipoma of the left thigh.
+
+Additional Comments:
+Clinical follow-up is recommended to monitor any changes in size or symptoms of the lesion. Imaging correlation may be advised if clinically indicated.
+
+Pathologist:
+Dr. Rachel Nguyen, MD
+Department of Pathology
+
+
+
+

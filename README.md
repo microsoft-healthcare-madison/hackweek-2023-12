@@ -34,11 +34,11 @@ stateDiagram
 flowchart TD
     A[Questionnaire] --> C[Break into individual items]
     subgraph Processing for Each Question
-        D["Generate *keywords* to identify\nCandidate EHR Snippets\n(Alt: Use Embeddings)"]
-        E[Generate *fact model* for abstracting\nCandidate EHR Snippets]
-        D --> F[Abstract all Candidate Snippets into\nfact model]
+        D["Generate *keyword query tree* to identify\nCandidate EHR Snippets\n(Alt: Use Embeddings)"]
+        E["Generate *interface FactModel {}* for abstracting\nCandidate EHR Snippets"]
+        D --> F["Abstract all Candidate Snippets into\nFactModel[]"]
         E --> F
-    F --> H[Summarize set of facts into\nPrepopulation Suggestions]
+    F --> H[Summarize set of facts into a\nPrepopulation Suggestion\nas QuestionnaireResponse.item]
     end
     C --> D
     C --> E

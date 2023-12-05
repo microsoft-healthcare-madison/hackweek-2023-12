@@ -1,5 +1,24 @@
 # day-2-answer-suggestion
 
+## Examples
+
+#### Inline simple question
+```sh
+bun run --watch src/index.ts --patient sample-patient-1/  --question "what stage breast cancer was found?"
+```
+
+See [example output](./outputs/inline.md)
+
+#### Multi-part question from external file
+
+```sh
+bun run --watch src/index.ts  --patient sample-patient-1/  --questionnairefile questionnaires/biopsy.json  
+```
+
+See [example output](./outputs/external.md)
+
+
+## Setup
 Include OPENAI env vars in `.env.local`:
 ```
 OPENAI_API_KEY=
