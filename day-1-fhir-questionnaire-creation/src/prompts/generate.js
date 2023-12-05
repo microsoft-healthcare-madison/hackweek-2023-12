@@ -122,11 +122,13 @@ Respond with a FHIR JSON Questionnaire object.`,
   const MAX_ATTEMPTS = 3;
   let attempts = 0;
   let initialJson;
+  let useModel = "gpt-3.5-turbo-1106";
   do {
     if (callbackProgressText) callbackProgressText("generating ...");
     let response = await client.chat.completions.create({
       // model: "gpt-4-1106-preview",
-      model: "gpt-3.5-turbo-1106",
+      // model: "gpt-3.5-turbo-1106",
+      model: useModel,
       temperature: 1.0,
       response_format: { type: "json_object" },
       messages,
@@ -151,6 +153,9 @@ Please fix any errors.
     });
     console.log("Attempt", attempts, initialJson);
     console.log(validationResponse);
+
+    // Upgrade the model to fix things
+    useModel = "gpt-4-1106-preview";
   } while (
     attempts < MAX_ATTEMPTS &&
     validationResponse.issue.some((i) =>
@@ -188,6 +193,25 @@ async function validate(r) {
   );
   return resultJson;
 }
+
+export async function loadQuestionnaireFromUrl(url) {
+  try {
+    const result = await fetch(url, {
+      headers: {
+        accept: "application/json+fhir",
+      },
+    });
+    const resultJson = await result.json();
+    // we remove the narrative from the definition as don't need that messing things about
+    if (resultJson.text) delete resultJson.text;
+
+    return resultJson;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
+
 /**
  *
  * @param {OpenAI} client
@@ -196,7 +220,8 @@ async function validate(r) {
 
 export async function refine(client, questionnaire, callbackProgressText) {
   console.log("Refining", questionnaire.item);
-  if (callbackProgressText) callbackProgressText("generating potential refinements...");
+  if (callbackProgressText)
+    callbackProgressText("generating potential refinements...");
   const messages = [
     {
       role: "system",

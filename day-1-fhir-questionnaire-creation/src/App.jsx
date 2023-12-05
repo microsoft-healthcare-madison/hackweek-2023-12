@@ -1,11 +1,15 @@
 import React, { useEffect, useState, useContext } from "react";
 import LinearProgress from "@mui/material/LinearProgress";
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import DownloadIcon from "@mui/icons-material/Download";
 import { SmartFormsRenderer, getResponse } from "@aehrc/smart-forms-renderer";
 import "./App.css";
 import jsonpatch from "jsonpatch";
 
 import HackweekLogo from "./assets/HackweekLogo.png";
-import { generate, refine } from "./prompts/generate";
+import { generate, refine, loadQuestionnaireFromUrl } from "./prompts/generate";
 
 console.log(import.meta.env);
 
@@ -16,6 +20,14 @@ let client = new OpenAI({
   organization: import.meta.env.VITE_OPENAI_API_ORG,
   dangerouslyAllowBrowser: true,
 });
+
+function qrParsed(qrJsonText) {
+  try {
+    return JSON.parse(qrJsonText);
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 // ActionItem Component
 const ActionItem = ({ categoryName, action, onApply, onIgnore }) => {
@@ -96,7 +108,10 @@ const ChatDialog = ({ generatingForm }) => {
 const Preview = (props) => {
   return (
     <div id="formcontainer">
-      <SmartFormsRenderer questionnaire={props.questionnaire} />
+      <SmartFormsRenderer
+        questionnaire={props.questionnaire}
+        questionnaireResponse={qrParsed(props.questionnaireResponse)}
+      />
     </div>
   );
 };
@@ -108,6 +123,9 @@ const App = () => {
   const [generatingForm, setGeneratingForm] = useState(false);
   const [generationMsg, setGenerationMsg] = useState(null);
   const [startingForm, setStartingForm] = useState(null);
+  const [loadQuestionnaireUrl, setLoadQuestionnaireUrl] = useState(
+    "https://fhir.forms-lab.com/Questionnaire/ips-prepop6"
+  );
   const [pastedText, setPastedText] = useState(
     `Basic Demographics
   Patient name
@@ -121,6 +139,9 @@ Contacts
 `
   );
   const [questionnaire, setQuestionnaire] = useState({});
+  const [questionnaireResponse, setQuestionnaireResponse] = useState("");
+  const [questionnaireResponseJson, setQuestionnaireResponseJson] =
+    useState("");
 
   useEffect(() => {
     if (!startingForm) return;
@@ -171,15 +192,15 @@ Contacts
   function PatchQuestionnaireItem(item, patchItem) {
     if (!item) return;
     let result = item.map((i) => {
-        if (i.item) {
-            i.item = PatchQuestionnaireItem(i.item, patchItem);
-        }
-        if (i.linkId === patchItem.linkId) {
-            return patchItem;
-        }
-        return i;
-      })
-      return result;
+      if (i.item) {
+        i.item = PatchQuestionnaireItem(i.item, patchItem);
+      }
+      if (i.linkId === patchItem.linkId) {
+        return patchItem;
+      }
+      return i;
+    });
+    return result;
   }
 
   const handleAction = {
@@ -218,13 +239,42 @@ Contacts
         {/* Center Pane: Chat Dialog */}
         <span className="generation-message">{generationMsg}</span>
         <ChatDialog generatingForm={generatingForm} />
-        <span className="rawQuestionnaire">
+        {/* <span className="rawQuestionnaire">
           {JSON.stringify(questionnaire, null, 2)}
-        </span>
+        </span> */}
+        <button
+          onClick={function (e) {
+            const qr = questionnaireResponseJson;
+            setQuestionnaireResponse(qr);
+          }}
+        >
+          Update answers
+        </button>
+        <button
+          onClick={function (e) {
+            const qr = getResponse();
+            console.log("Welcome", qr);
+            setQuestionnaireResponseJson(JSON.stringify(qr, null, 2));
+          }}
+        >
+          Get entered form data so far
+        </button>
+        <TextField
+          multiline
+          fullWidth
+          rows={30}
+          value={questionnaireResponseJson}
+          onChange={(event) => {
+            setQuestionnaireResponseJson(event.target.value);
+          }}
+        />
       </div>
       <div style={{ flex: 1 }} className="preview-pane">
         {/* Right Pane: Preview */}
-        <Preview questionnaire={questionnaire} />
+        <Preview
+          questionnaire={questionnaire}
+          questionnaireResponse={questionnaireResponse}
+        />
       </div>
     </div>
   ) : (
@@ -235,14 +285,18 @@ Contacts
         Welcome. Please paste/enter a form in a text format to generate a<br />{" "}
         FHIR Questionnaire using OpenAI's GPT4...
         <br />
-        <textarea
-          className="message"
+        <TextField
+          multiline
+          fullWidth
+          size="small"
+          minRows={10}
+          maxRows={30}
           onChange={function (e) {
-            // console.log("OC", e);
             setPastedText(e.target.value);
           }}
           value={pastedText}
-        ></textarea>
+          variant="outlined"
+        ></TextField>
         <p className="generateButton">
           <button
             onClick={function (e) {
@@ -255,6 +309,62 @@ Contacts
           <span className="generation-message">{generationMsg}</span>
         </p>
         {generatingForm ? <LinearProgress /> : <span />}
+        <TextField
+          fullWidth
+          label="Load Questionnaire URL"
+          variant="standard"
+          helperText="Enter a URL to load an existing questionnaire definition from a server"
+          onChange={function (e) {
+            // console.log("OC", e);
+            setLoadQuestionnaireUrl(e.target.value);
+          }}
+          value={loadQuestionnaireUrl}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={async function (e) {
+                    setGeneratingForm(true);
+                    setGenerationMsg("Loading questionnaire...");
+                    console.log(
+                      "Load questionnaire definition from: ",
+                      loadQuestionnaireUrl
+                    );
+                    const loadedQuestionnaire = await loadQuestionnaireFromUrl(
+                      loadQuestionnaireUrl
+                    );
+                    console.log("Loaded questionnaire", loadedQuestionnaire);
+                    setQuestionnaire(loadedQuestionnaire);
+
+                    // Grab the initial content from the form (generated by the renderer)
+                    // (not pre-populated content)
+                    const qr = getResponse();
+                    console.log("Welcome", qr);
+                    setQuestionnaireResponseJson(JSON.stringify(qr, null, 2));
+
+                    // Generate suggestions
+                    const refineIdeas = await refine(client, qr, (message) => {
+                      setGenerationMsg(message);
+                    });
+                    setCategories(
+                      Object.fromEntries(
+                        refineIdeas.categories.map((c) => [
+                          c.title,
+                          c.suggestions,
+                        ])
+                      )
+                    );
+                    setGenerationMsg(null);
+                    setGeneratingForm(false);
+                  }}
+                >
+                  <DownloadIcon />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        ></TextField>
       </div>
     </div>
   );
