@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
+import LinearProgress from "@mui/material/LinearProgress";
 import { SmartFormsRenderer, getResponse } from "@aehrc/smart-forms-renderer";
 import "./App.css";
 import jsonpatch from "jsonpatch";
 
-import HackweekLogo from './assets/HackweekLogo.png';
+import HackweekLogo from "./assets/HackweekLogo.png";
 import { generate, refine } from "./prompts/generate";
 
 console.log(import.meta.env);
@@ -19,21 +20,23 @@ let client = new OpenAI({
 // ActionItem Component
 const ActionItem = ({ categoryName, action, onApply, onIgnore }) => {
   return (
-    <div>
+    <div className="action-item">
       <div>{action.label}</div>
-      <div>{JSON.stringify(action.patch)}</div>
       <div>
         <button
           onClick={() => onApply(action, categoryName)}
+          className="px-2 py-1 mr-1 bg-green-500 text-white rounded"
         >
           Apply
         </button>
         <button
           onClick={() => onIgnore(action, categoryName)}
+          className="px-2 py-1 bg-red-500 text-white rounded"
         >
           Ignore
         </button>
       </div>
+      <div className="action-patch">{JSON.stringify(action.patch)}</div>
     </div>
   );
 };
@@ -42,9 +45,7 @@ const ActionItem = ({ categoryName, action, onApply, onIgnore }) => {
 const Category = ({ categoryName, actions, onAction }) => {
   return (
     <div className="action-category">
-      <h3 >
-        {categoryName}
-      </h3>
+      <h3>{categoryName}</h3>
       {actions.map((action, index) => (
         <ActionItem
           key={index}
@@ -73,7 +74,7 @@ const ChatDialog = () => {
     <div className="messages">
       <div>
         {messages.map((msg, index) => (
-          <div key={index}>
+          <div key={index} className="message">
             {msg}
           </div>
         ))}
@@ -110,15 +111,22 @@ const App = () => {
   useEffect(() => {
     if (!startingForm) return;
     (async function () {
-      const result = await generate(client, startingForm);
+      setGeneratingForm(true);
+      const result = await generate(client, startingForm, (message) => {
+        setGenerationMsg(message);
+      });
       console.log("Result", result);
       setQuestionnaire(result.json);
-      const refineIdeas = await refine(client, result.json);
+      const refineIdeas = await refine(client, result.json, (message) => {
+        setGenerationMsg(message);
+      });
       setCategories(
         Object.fromEntries(
           refineIdeas.categories.map((c) => [c.title, c.suggestions])
         )
       );
+      setGenerationMsg(null);
+      setGeneratingForm(false);
     })();
   }, [startingForm]);
 
