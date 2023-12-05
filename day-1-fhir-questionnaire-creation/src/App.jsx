@@ -3,6 +3,7 @@ import { SmartFormsRenderer, getResponse } from "@aehrc/smart-forms-renderer";
 import "./App.css";
 import jsonpatch from "jsonpatch";
 
+import HackweekLogo from './assets/HackweekLogo.png';
 import { generate, refine } from "./prompts/generate";
 
 console.log(import.meta.env);
@@ -40,7 +41,7 @@ const ActionItem = ({ categoryName, action, onApply, onIgnore }) => {
 // Category Component
 const Category = ({ categoryName, actions, onAction }) => {
   return (
-    <div>
+    <div className="action-category">
       <h3 >
         {categoryName}
       </h3>
@@ -69,7 +70,7 @@ const ChatDialog = () => {
   };
 
   return (
-    <div>
+    <div className="messages">
       <div>
         {messages.map((msg, index) => (
           <div key={index}>
@@ -79,6 +80,7 @@ const ChatDialog = () => {
       </div>
       <form onSubmit={handleSendMessage}>
         <input
+          className="message"
           type="text"
           name="message"
           placeholder="Type your message here..."
@@ -150,55 +152,50 @@ const App = () => {
     },
   };
 
-  return startingForm ? (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-      }}
-    >
-      <div style={{ flex: 1 }}>
-        {/* Left Pane: Categories and Actions */}
-        {Object.entries(categories).map(([categoryName, actions], index) => (
-          <Category
-            key={index}
-            categoryName={categoryName}
-            actions={actions}
-            onAction={handleAction}
-          />
-        ))}
-      </div>
-      <div style={{ flex: 1 }}>
-        {/* Center Pane: Chat Dialog */}
-        <ChatDialog />
-      </div>
-      <div style={{ flex: 1 }}>
-        {/* Right Pane: Preview */}
-        <Preview questionnaire={questionnaire} />
-      </div>
-    </div>
-  ) : (
-    <div>
-      Welcome. Please paste some form text to start with
-      <br/>
-      <textarea
-        onChange={function (e) {
-          console.log("OC", e);
-          setPastedText(e.target.value);
-        }}
-        value={pastedText}
-      ></textarea>
-      <br/>
-      <button
-        onClick={function (e) {
-          console.log("Welcome", pastedText);
-          setStartingForm(pastedText);
-        }}
-      >
-        Begin
-      </button>
-    </div>
-  );
+    return startingForm ? (
+        <div
+            style={{
+            display: 'flex',
+            flexDirection: 'row'
+
+        }}>
+            <div style={{flex: 1}}>
+                {/* Left Pane: Categories and Actions */}
+                {Object.entries(categories).map(([categoryName, actions], index) => (
+                    <Category
+                        key={index}
+                        categoryName={categoryName}
+                        actions={actions}
+                        onAction={handleAction}
+                    />
+                ))}
+            </div>
+            <div style={{flex: 1}}>
+                {/* Center Pane: Chat Dialog */}
+                <ChatDialog />
+            </div>
+            <div style={{flex: 1}} className='preview-pane'>
+                {/* Right Pane: Preview */}
+                <Preview questionnaire={questionnaire}/>
+            </div>
+        </div>
+    ) : (
+        <div className='welcome-page'>
+            <img className='hackweek-logo' src={HackweekLogo} />
+            <div>
+                <h2>Hackweek 2023</h2>
+                Welcome. Please paste/enter a form in a text format to generate a<br/> FHIR Questionnaire using OpenAI's GPT4...<br/>
+                <textarea className='message' onChange={function(e){
+                    console.log("OC", e);
+                    setPastedText(e.target.value)
+                }} value={pastedText}></textarea><br/>
+                <button onClick={function(e){
+                    console.log("Welcome", pastedText)
+                    setStartingForm(pastedText)
+                    }}>Generate form</button>
+            </div>
+        </div>
+    );
 };
 
 export default App;
