@@ -7,7 +7,7 @@
 bun run --watch src/index.ts --patient sample-patient-1/  --question "what stage breast cancer was found?"
 ```
 
-See [example output](./outputs/inline.md)
+See [example output](./outputs/inline.txt)
 
 #### Multi-part question from external file
 
@@ -15,7 +15,7 @@ See [example output](./outputs/inline.md)
 bun run --watch src/index.ts  --patient sample-patient-1/  --questionnairefile questionnaires/biopsy.json  
 ```
 
-See [example output](./outputs/external.md)
+See [example output](./outputs/external.txt)
 
 
 ## Setup
