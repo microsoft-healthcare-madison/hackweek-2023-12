@@ -1,4 +1,4 @@
-export type QuestionnaireItem {
+export interface QuestionnaireItem {
     linkId: string;
     text: string;
     type: string;
@@ -10,7 +10,7 @@ export type QuestionnaireItem {
     item: QuestionnaireItem[];
 }
 
-export type Keywords {
+export type Keywords = {
     and:(string | Keywords)[];
 } | {
     or: (string | Keywords)[];
