@@ -106,7 +106,7 @@ ${schema}
 * Do not invent "Codings"; just use strings if there is no specified standardized code
 * Populate linkIds enableWhen, etc.
 * Do not invent placeholder data.
-* Always set "repeats" for questions that allow more than one answer
+* Always set "repeats" for questions or groups that allow more than one answer
 * For string items that need to use multiple lines, use type='text' instead of 'string'
 * Always allocate a canonical url for the form in Questionnaire.url with a base of http://fhir.forms-lab.com/Questionnaire/
 
