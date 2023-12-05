@@ -7,8 +7,8 @@ const schema = `{
   "identifier" : [{ Identifier }], // Business identifier for questionnaire
   "version" : "<string>", // Business version of the questionnaire
   // versionAlgorithm[x]: How to compare versions. One of these 2:
-  "versionAlgorithmString" : "<string>",
-  "versionAlgorithmCoding" : { Coding },
+  // "versionAlgorithmString" : "<string>",
+  // "versionAlgorithmCoding" : { Coding },
   "name" : "<string>", // I Name for this questionnaire (computer friendly)
   "title" : "<string>", // Name for this questionnaire (human friendly)
   "derivedFrom" : ["<canonical(Questionnaire)>"], // Based on Questionnaire
