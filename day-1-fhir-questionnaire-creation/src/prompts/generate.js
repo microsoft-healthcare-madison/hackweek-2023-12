@@ -168,7 +168,7 @@ Please fix any errors.
 
 async function validate(r) {
   const result = await fetch(
-    "https://hapi.fhir.org/baseR4/Questionnaire/$validate",
+    "https://fhir.forms-lab.com/Questionnaire/$validate",
     {
       method: "POST",
       headers: {
