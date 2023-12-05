@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
+import LinearProgress from "@mui/material/LinearProgress";
 import { SmartFormsRenderer, getResponse } from "@aehrc/smart-forms-renderer";
 import "./App.css";
 import jsonpatch from "jsonpatch";
 
+import HackweekLogo from "./assets/HackweekLogo.png";
 import { generate, refine } from "./prompts/generate";
 
 console.log(import.meta.env);
@@ -18,21 +20,23 @@ let client = new OpenAI({
 // ActionItem Component
 const ActionItem = ({ categoryName, action, onApply, onIgnore }) => {
   return (
-    <div>
+    <div className="action-item">
       <div>{action.label}</div>
-      <div>{JSON.stringify(action.patch)}</div>
       <div>
         <button
           onClick={() => onApply(action, categoryName)}
+          className="px-2 py-1 mr-1 bg-green-500 text-white rounded"
         >
           Apply
         </button>
         <button
           onClick={() => onIgnore(action, categoryName)}
+          className="px-2 py-1 bg-red-500 text-white rounded"
         >
           Ignore
         </button>
       </div>
+      <div className="action-patch">{JSON.stringify(action.patch)}</div>
     </div>
   );
 };
@@ -40,10 +44,8 @@ const ActionItem = ({ categoryName, action, onApply, onIgnore }) => {
 // Category Component
 const Category = ({ categoryName, actions, onAction }) => {
   return (
-    <div>
-      <h3 >
-        {categoryName}
-      </h3>
+    <div className="action-category">
+      <h3>{categoryName}</h3>
       {actions.map((action, index) => (
         <ActionItem
           key={index}
@@ -58,7 +60,7 @@ const Category = ({ categoryName, actions, onAction }) => {
 };
 
 // ChatDialog Component
-const ChatDialog = () => {
+const ChatDialog = ({ generatingForm }) => {
   const [messages, setMessages] = useState([]);
 
   const handleSendMessage = (event) => {
@@ -69,16 +71,18 @@ const ChatDialog = () => {
   };
 
   return (
-    <div>
+    <div className="messages">
       <div>
         {messages.map((msg, index) => (
-          <div key={index}>
+          <div key={index} className="message">
             {msg}
           </div>
         ))}
       </div>
+      {generatingForm ? <LinearProgress /> : <span />}
       <form onSubmit={handleSendMessage}>
         <input
+          className="message"
           type="text"
           name="message"
           placeholder="Type your message here..."
@@ -99,24 +103,44 @@ const Preview = (props) => {
 
 // Main App Component
 const App = () => {
-
   const [categories, setCategories] = useState([]);
+
+  const [generatingForm, setGeneratingForm] = useState(false);
+  const [generationMsg, setGenerationMsg] = useState(null);
   const [startingForm, setStartingForm] = useState(null);
-  const [pastedText, setPastedText] = useState("");
+  const [pastedText, setPastedText] = useState(
+    `Basic Demographics
+  Patient name
+  DOB
+  Address
+  Phone numbers
+Contacts
+  Name
+  Phone Number
+  Address
+`
+  );
   const [questionnaire, setQuestionnaire] = useState({});
 
   useEffect(() => {
     if (!startingForm) return;
     (async function () {
-      const result = await generate(client, startingForm);
+      setGeneratingForm(true);
+      const result = await generate(client, startingForm, (message) => {
+        setGenerationMsg(message);
+      });
       console.log("Result", result);
       setQuestionnaire(result.json);
-      const refineIdeas = await refine(client, result.json);
+      const refineIdeas = await refine(client, result.json, (message) => {
+        setGenerationMsg(message);
+      });
       setCategories(
         Object.fromEntries(
           refineIdeas.categories.map((c) => [c.title, c.suggestions])
         )
       );
+      setGenerationMsg(null);
+      setGeneratingForm(false);
     })();
   }, [startingForm]);
 
@@ -126,37 +150,59 @@ const App = () => {
       [categoryName]: categories[categoryName].filter((a) => a !== action),
     });
   }
+  function findItem(item, linkId) {
+    for (const i of item) {
+      if (i.item) {
+        let found = findItem(i.item, linkId);
+        if (found) return found;
+      }
+    }
+    return item.find((i) => i.linkId === linkId);
+  }
+
+  function PatchQuestionnaire(questionnaire, patchItem) {
+    let result = {
+      ...questionnaire,
+      item: PatchQuestionnaireItem(questionnaire.item, patchItem),
+    };
+    return result;
+  }
+
+  function PatchQuestionnaireItem(item, patchItem) {
+    if (!item) return;
+    let result = item.map((i) => {
+        if (i.item) {
+            i.item = PatchQuestionnaireItem(i.item, patchItem);
+        }
+        if (i.linkId === patchItem.linkId) {
+            return patchItem;
+        }
+        return i;
+      })
+      return result;
+  }
+
   const handleAction = {
     apply: (action, categoryName) => {
       console.log("Action", action);
-      const newItem = jsonpatch.apply_patch(
-        questionnaire.item.find((i) => i.linkId === action.linkId),
-        action.patch
-      );
-      console.log("Applied patch", newItem);
-      setQuestionnaire({
-        ...questionnaire,
-        item: questionnaire.item.map((i) => {
-          if (action.linkId === i.linkId) {
-            return newItem;
-          }
-          return i;
-        }),
-      });
-      removeAction(action, categoryName);
+      let itemToPatch = findItem(questionnaire.item, action.linkId);
+      if (itemToPatch) {
+        const newItem = jsonpatch.apply_patch(itemToPatch, action.patch);
+        console.log("Applied patch", newItem);
+        setQuestionnaire(PatchQuestionnaire(questionnaire, newItem));
+        removeAction(action, categoryName);
+      } else {
+        setGenerationMsg("No item found for linkId: " + action.linkId);
+        console.log("No item found for linkId", action.linkId);
+      }
     },
     ignore: (action, categoryName) => {
       removeAction(action, categoryName);
     },
   };
 
-  return startingForm ? (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-      }}
-    >
+  return questionnaire.resourceType ? (
+    <div className="tri-pane-display">
       <div style={{ flex: 1 }}>
         {/* Left Pane: Categories and Actions */}
         {Object.entries(categories).map(([categoryName, actions], index) => (
@@ -170,33 +216,46 @@ const App = () => {
       </div>
       <div style={{ flex: 1 }}>
         {/* Center Pane: Chat Dialog */}
-        <ChatDialog />
+        <span className="generation-message">{generationMsg}</span>
+        <ChatDialog generatingForm={generatingForm} />
+        <span className="rawQuestionnaire">
+          {JSON.stringify(questionnaire, null, 2)}
+        </span>
       </div>
-      <div style={{ flex: 1 }}>
+      <div style={{ flex: 1 }} className="preview-pane">
         {/* Right Pane: Preview */}
         <Preview questionnaire={questionnaire} />
       </div>
     </div>
   ) : (
-    <div>
-      Welcome. Please paste some form text to start with
-      <br/>
-      <textarea
-        onChange={function (e) {
-          console.log("OC", e);
-          setPastedText(e.target.value);
-        }}
-        value={pastedText}
-      ></textarea>
-      <br/>
-      <button
-        onClick={function (e) {
-          console.log("Welcome", pastedText);
-          setStartingForm(pastedText);
-        }}
-      >
-        Begin
-      </button>
+    <div className="welcome-page">
+      <img className="hackweek-logo" src={HackweekLogo} />
+      <div>
+        <h2>Hackweek 2023</h2>
+        Welcome. Please paste/enter a form in a text format to generate a<br />{" "}
+        FHIR Questionnaire using OpenAI's GPT4...
+        <br />
+        <textarea
+          className="message"
+          onChange={function (e) {
+            // console.log("OC", e);
+            setPastedText(e.target.value);
+          }}
+          value={pastedText}
+        ></textarea>
+        <p className="generateButton">
+          <button
+            onClick={function (e) {
+              console.log("Welcome", pastedText);
+              setStartingForm(pastedText);
+            }}
+          >
+            Generate form
+          </button>
+          <span className="generation-message">{generationMsg}</span>
+        </p>
+        {generatingForm ? <LinearProgress /> : <span />}
+      </div>
     </div>
   );
 };

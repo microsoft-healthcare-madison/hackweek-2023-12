@@ -7,8 +7,8 @@ const schema = `{
   "identifier" : [{ Identifier }], // Business identifier for questionnaire
   "version" : "<string>", // Business version of the questionnaire
   // versionAlgorithm[x]: How to compare versions. One of these 2:
-  "versionAlgorithmString" : "<string>",
-  "versionAlgorithmCoding" : { Coding },
+  // "versionAlgorithmString" : "<string>",
+  // "versionAlgorithmCoding" : { Coding },
   "name" : "<string>", // I Name for this questionnaire (computer friendly)
   "title" : "<string>", // Name for this questionnaire (human friendly)
   "derivedFrom" : ["<canonical(Questionnaire)>"], // Based on Questionnaire
@@ -91,7 +91,7 @@ const schema = `{
  * @param {OpenAI} client
  * @param {string} formText
  */
-export async function generate(client, formText) {
+export async function generate(client, formText, callbackProgressText) {
   let messages = [
     {
       role: "system",
@@ -106,7 +106,9 @@ ${schema}
 * Do not invent "Codings"; just use strings if there is no specified standardized code
 * Populate linkIds enableWhen, etc.
 * Do not invent placeholder data.
-* Always set "repeats" for questions that allow more than one answer
+* Always set "repeats" for questions or groups that allow more than one answer
+* For string items that need to use multiple lines, use type='text' instead of 'string'
+* Always allocate a canonical url for the form in Questionnaire.url with a base of http://fhir.forms-lab.com/Questionnaire/
 
 ${"```"}
 ${formText}
@@ -121,6 +123,7 @@ Respond with a FHIR JSON Questionnaire object.`,
   let attempts = 0;
   let initialJson;
   do {
+    if (callbackProgressText) callbackProgressText("generating ...");
     let response = await client.chat.completions.create({
       // model: "gpt-4-1106-preview",
       model: "gpt-3.5-turbo-1106",
@@ -129,6 +132,7 @@ Respond with a FHIR JSON Questionnaire object.`,
       messages,
     });
     initialJson = JSON.parse(response.choices[0].message.content);
+    if (callbackProgressText) callbackProgressText("validating ...");
     validationResponse = await validate(initialJson);
     if (attempts > 0) {
       messages = messages.slice(0, -2);
@@ -153,6 +157,8 @@ Please fix any errors.
       ["fatal", "error"].includes(i.severity)
     )
   );
+  if (callbackProgressText) callbackProgressText("form generated.");
+  if (callbackProgressText) callbackProgressText("");
 
   return {
     validation: validationResponse,
@@ -162,7 +168,7 @@ Please fix any errors.
 
 async function validate(r) {
   const result = await fetch(
-    "https://hapi.fhir.org/baseR4/Questionnaire/$validate",
+    "https://fhir.forms-lab.com/Questionnaire/$validate",
     {
       method: "POST",
       headers: {
@@ -176,7 +182,9 @@ async function validate(r) {
   const resultJson = await result.json();
   delete resultJson.text;
   resultJson.issue = resultJson.issue.filter(
-    (i) => !i.diagnostics.match("dom-6")
+    (i) =>
+      i.severity == "information" ||
+      (i.diagnostics && !i.diagnostics.match("dom-6"))
   );
   return resultJson;
 }
@@ -186,8 +194,9 @@ async function validate(r) {
  * @param {string} formText
  */
 
-export async function refine(client, questionnaire) {
+export async function refine(client, questionnaire, callbackProgressText) {
   console.log("Refining", questionnaire.item);
+  if (callbackProgressText) callbackProgressText("generating potential refinements...");
   const messages = [
     {
       role: "system",
@@ -236,6 +245,8 @@ Respond with a JSON Response object.`,
     response_format: { type: "json_object" },
     messages,
   });
+
+  if (callbackProgressText) callbackProgressText("");
 
   let ideas = JSON.parse(response.choices[0].message.content);
   console.log("IDEAS", ideas);
