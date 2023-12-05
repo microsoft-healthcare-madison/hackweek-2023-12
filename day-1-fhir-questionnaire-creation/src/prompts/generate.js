@@ -173,7 +173,7 @@ Please fix any errors.
 
 async function validate(r) {
   const result = await fetch(
-    "https://fhir.forms-lab.com/Questionnaire/$validate",
+    "https://hapi.fhir.org/baseR4/Questionnaire/$validate",
     {
       method: "POST",
       headers: {
