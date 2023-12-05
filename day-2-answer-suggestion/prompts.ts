@@ -2,6 +2,7 @@ import OpenAI from "openai";
 import { QuestionnaireItem } from "./types";
 import { writeFileSync, readFileSync, existsSync } from "fs";
 import crypto from "crypto";
+import { ChatCompletionMessage } from "openai/resources/index.mjs";
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -46,7 +47,7 @@ const cacheManager = new CacheManager("kwCache.json");
 
 export async function identifyKeywordsForQuestion(
   q: QuestionnaireItem,
-  config: { skipCache: boolean }
+  config: { skipCache: boolean } | undefined
 ) {
   if (!config?.skipCache) {
     const cachedResult = cacheManager.get(q.text);
@@ -176,7 +177,7 @@ const factModelCacheManager = new CacheManager("factModelCache.json");
 
 export async function createFactModelForQuestion(
   q: QuestionnaireItem,
-  config: { skipCache: boolean }
+  config: { skipCache: boolean } | undefined
 ) {
   if (!config?.skipCache) {
     const cachedResult = factModelCacheManager.get(q.text);
