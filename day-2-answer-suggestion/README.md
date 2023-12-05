@@ -1,9 +1,10 @@
 # day-2-answer-suggestion
 
 Include OPENAI env vars in `.env.local`:
-
-  OPENAI_API_KEY=
-  OPENAI_API_ORG=
+```
+OPENAI_API_KEY=
+OPENAI_API_ORG=
+```
 
 To install dependencies:
 
