@@ -1,0 +1,13 @@
+Annual Wellness Visit
+
+Patient Information:
+
+Name: Margaret Thompson
+Age: 52
+Gender: Female
+DOB: April 10, 1971
+Patient ID: MT19710410
+Clinical History:
+Margaret Thompson presents for an annual wellness visit.
+
+Risk factors: she reports both of her parents died of a heart attack at age 55

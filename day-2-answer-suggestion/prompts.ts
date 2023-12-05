@@ -43,14 +43,14 @@ class CacheManager {
   }
 }
 
-const cacheManager = new CacheManager("kwCache.json");
+const kwCache = new CacheManager("kwCache.json");
 
 export async function identifyKeywordsForQuestion(
   q: QuestionnaireItem,
-  config: { skipCache: boolean } | undefined
+  config?: { skipCache: boolean }
 ) {
   if (!config?.skipCache) {
-    const cachedResult = cacheManager.get(q.text);
+    const cachedResult = kwCache.get(q.text);
     if (cachedResult) {
       return cachedResult;
     }
@@ -65,27 +65,34 @@ export async function identifyKeywordsForQuestion(
       {
         role: "system",
         content:
-          "You are a clinical data abstraction expert with deep knowledge of EHR formats and typescript interfaces",
+          "You are a clinical data abstraction expert with deep knowledge of EHR formats, semantic search, tf–idf, and typescript interfaces",
       },
 
       {
         role: "user",
-        content: `Based on the my question, please identify a set of keywords we can use to search the EHR for relevant snippets of information:
+        content: `Based on the my question, please identify a query we can use to search the EHR for relevant snippets of information.
 
-Your keywords should use ands and ors help us find the most relevant information. Keep them simple and short.  Use ands/ors to express elegant logic. Use many synonyms and related terms.
+Your query should use "and" and "or" tree structure help us find relevant information. Keep them simple and short, and broad. 
 
-* All keywords should be stemmed -- strip suffixes, remove plurals
+## Step 1. Break the question into essential noun concepts
+
+Focus on essential concepts that will appear explicitly in EHR.
+
+Omit any implicit concepts like "diagnosis", "treatment", etc.
+
+For example, for a question like "any history of head injury" -- the words "any history" are not part of the noun concept. The core noun concept is "head injury", so we'll AND a subquery for "head" with a subquery for "injury", then OR in any specific additoinal terms for head injury.
+
+* NEVER query for words "record", "history", "diagnosis", "prescription", "treatment"; these are implicit concepts.
+
+* NEVER query for like "when" or "in what year"; these are impliclit concepts. 
+
+## Step 2. Create queries to triangulate each noun concept
+* All keywords should be stemmed -- strip suffixes like "ing" and remove plurals
 * Use many clinical expressions, synonyms, and related terms
-* Use proper clinical terms as well as patient friendly terms
-* Anticipate the concrete words or phrases that could appear in EHR relevant to this question
-    *  make keywords for all of them
-* Re: medications, generate many keywords for
-    * classes
-    * specific brand names
-    * specific generic names
-* Assume the EHR data may not use terms directly from the question; imagine what terms could appear
+* Include clinical abbreviations and acronyms and patient-friendly terms
+* Expand categories into specific examples with "or"
 
-Your ouptput uses JSON in the following format:
+Your output uses JSON in the following format:
 
 type Keywords {
     and:(string | Keywords)[];
@@ -119,8 +126,6 @@ type Keywords {
         content: JSON.stringify({
           or: [
             "antihypertens",
-            "bp med",
-            "blood pressure med",
             {
               or: [
                 "ACE",
@@ -152,48 +157,38 @@ type Keywords {
                 "propranolol",
               ],
             },
-            {
-              and: [
-                {
-                  or: ["hypertension", "blood pressure"],
-                },
-                {
-                  or: ["med", "treatment", "drug", "management"],
-                },
-              ],
-            },
           ],
         }),
       },
-      { role: "user", content: q.text },
+      { role: "user", content: JSON.stringify(q.text) },
     ],
   });
   const ret = JSON.parse(response.choices[0].message.content!);
-  cacheManager.set(q.text, ret);
+  kwCache.set(q.text, ret);
   return ret;
 }
 
-const factModelCacheManager = new CacheManager("factModelCache.json");
+const factModelCache = new CacheManager("factModelCache.json");
 
 export async function createFactModelForQuestion(
   q: QuestionnaireItem,
-  config: { skipCache: boolean } | undefined
+  config?: { skipCache: boolean }
 ) {
   if (!config?.skipCache) {
-    const cachedResult = factModelCacheManager.get(q.text);
+    const cachedResult = factModelCache.get(q.text);
     if (cachedResult) {
       return cachedResult;
     }
   }
-    const messages = [
-      {
-        role: "system",
-        content:
-          "You are a clinical data abstraction expert with deep knowledge of EHR formats and typescript interfaces",
-      },
-      {
-        role: "user",
-        content: `
+  const messages = [
+    {
+      role: "system",
+      content:
+        "You are a clinical data abstraction expert with deep knowledge of EHR formats and typescript interfaces",
+    },
+    {
+      role: "user",
+      content: `
 Based on my question, I need a "fact model" and data abstraction instructions for an EHR data abstraction team. The team will process EHR data in chunks, populating instances of the fact model. Their parallel work demands a fact model suitable for monotonic aggregation. The fact model should consist of TypeScript interfaces for populating a database to answer the clinical question.
 
 * Do not include elements for patient identification; the abstraction team will always be working in the context of a single patient.
@@ -207,10 +202,10 @@ Provide detailed commentary as instructions for the data abstraction team. They 
  * Identifying relevant information.
  * Determining when to create facts and when to discard irrelevant data.
 `,
-      },
-      { role: "user", content: q.text },
-    ]
-    console.log(messages)
+    },
+    { role: "user", content: JSON.stringify(q) },
+  ];
+  // console.log(messages)
   const response = await client.chat.completions.create({
     // model: "gpt-3.5-turbo-1106",
     model: "gpt-4-1106-preview",
@@ -218,21 +213,20 @@ Provide detailed commentary as instructions for the data abstraction team. They 
     messages: messages as ChatCompletionMessage[],
   });
   const ret = response.choices[0].message.content;
-  factModelCacheManager.set(q.text, ret);
+  factModelCache.set(q.text, ret);
   return ret;
 }
 
-const abstractionCacheManager = new CacheManager("abstractionCache.json");
-
-export async function createAbstractionForEhrChunk(
+const factCache = new CacheManager("factCache.json");
+export async function ehrChunkToFacts(
   instructions: string,
   ehrChunk: string,
-  config: { skipCache: boolean }
+  config?: { skipCache: boolean }
 ) {
   if (!config?.skipCache) {
     let cacheKey = `${instructions}${ehrChunk}`;
     cacheKey = crypto.createHash("md5").update(cacheKey).digest("hex");
-    const cachedResult = abstractionCacheManager.get(instructions + ehrChunk);
+    const cachedResult = factCache.get(instructions + ehrChunk);
     if (cachedResult) {
       return cachedResult;
     }
@@ -256,12 +250,84 @@ export async function createAbstractionForEhrChunk(
       {
         role: "user",
         content:
-          `Here is an EHR chunk. Perform abstractions and return a JSON FactModel[] array with 0, 1, or more elements\n\n---\n` +
+          `Here is an EHR chunk. Perform abstractions and return a a JSON object with {"result": FactModel[]}. The FactModel[] array can have 0, 1, or more elements\n\n---\n` +
           ehrChunk,
       },
     ],
   });
   const ret = JSON.parse(response.choices[0].message.content!);
-  abstractionCacheManager.set(instructions + ehrChunk, ret);
+  factCache.set(instructions + ehrChunk, ret);
+  return ret;
+}
+
+const finalAnswerCache = new CacheManager("finalAnswerCache.json");
+
+export async function createAnswerToQuestion(
+  q: QuestionnaireItem,
+  facts: any[],
+  config?: { skipCache: boolean }
+) {
+  const factsString = JSON.stringify(facts, null, 2);
+  if (!config?.skipCache) {
+    const cachedResult = finalAnswerCache.get(q.text + factsString);
+    if (cachedResult) {
+      return cachedResult;
+    }
+  }
+
+  const response = await client.chat.completions.create({
+    // model: "gpt-4-1106-preview",
+    model: "gpt-3.5-turbo-1106",
+    temperature: 0.9,
+    response_format: { type: "json_object" },
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are a clinical informatics expert with deep knowledge of EHR formats and FHIR.",
+      },
+      {
+        role: "user",
+        content: `
+
+# Question
+${JSON.stringify(q, null, 2)}
+
+# Facts
+${factsString}
+
+# Answer format
+
+Based on my question, please create an answer, using the supplied facts.
+
+Output a JSON QuestionnaireResponse.item like
+
+{ // Groups and questions
+    "linkId" : "<string>", // R!  Pointer to specific item from Questionnaire
+    "definition" : "<uri>", // ElementDefinition - details for the item
+    "text" : "<string>", // Name for group or question text
+    "answer" : [{ // The response(s) to the question
+      // value[x]: Single-valued answer to the question. One of these 12:
+      "valueBoolean" : <boolean>,
+      "valueDecimal" : <decimal>,
+      "valueInteger" : <integer>,
+      "valueDate" : "<date>",
+      "valueDateTime" : "<dateTime>",
+      "valueTime" : "<time>",
+      "valueString" : "<string>",
+      "valueUri" : "<uri>",
+      "valueAttachment" : { Attachment },
+      "valueCoding" : { Coding },
+      "valueQuantity" : { Quantity },
+      "valueReference" : { Reference(Any) },
+      "item" : [{ Content as for QuestionnaireResponse.item }] // Nested groups and questions
+    }
+`,
+      },
+    ],
+  });
+
+  const ret = JSON.parse(response.choices[0].message.content!);
+  finalAnswerCache.set(q.text + factsString, ret);
   return ret;
 }

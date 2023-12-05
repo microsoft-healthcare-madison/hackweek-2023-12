@@ -1,0 +1,40 @@
+Pathology Report
+
+Patient Information:
+
+Name: Margaret Thompson
+Age: 52
+Gender: Female
+DOB: April 10, 1971
+Patient ID: MT19710410
+Clinical History:
+Margaret Thompson presented with a palpable lump in the right breast. She has no known family history of breast cancer and is a non-smoker with moderate alcohol consumption.
+
+Specimen Information:
+
+Specimen Type: Right Breast Biopsy
+Date of Collection: November 15, 2023
+Date of Receipt: November 16, 2023
+Surgeon: Dr. Emily Watson
+Gross Description:
+The specimen consists of a single fragment of tan-white tissue, measuring 2.5 x 1.5 x 1.0 cm. The cut surface is homogeneous.
+
+Microscopic Examination:
+The specimen shows features of invasive ductal carcinoma. The tumor measures 2 cm in greatest dimension. Nuclear grade is 2, indicating moderate differentiation. The margins are clear of the tumor. There is no evidence of lymphovascular invasion.
+
+Immunohistochemistry:
+
+Estrogen Receptor (ER): Positive
+Progesterone Receptor (PR): Positive
+HER2/neu: Negative
+TNM Staging:
+
+Tumor (T): T2
+Nodes (N): N0 (no regional lymph node metastasis)
+Metastasis (M): M0 (no distant metastasis)
+Additional Comments:
+It is recommended to correlate these findings with radiologic examinations. Given the patient's age, genetic counseling is advised.
+
+Pathologist:
+Dr. John Lee, MD
+Department of Pathology

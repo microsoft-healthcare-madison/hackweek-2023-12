@@ -1,0 +1,36 @@
+{
+  "item": [
+    {
+      "linkId": "group-HistopathologyRequestSoftTissueBiopsy.ClinicalInformation.SoftTissueBiopsyHistoClinicalInformation",
+      "text": "Clinical Information (soft tissue biopsy histopathology)",
+      "type": "group",
+      "item": [
+        {
+          "linkId": "HistopathologyRequestSoftTissueBiopsy.ClinicalInformation.SoftTissueBiopsyHistoClinicalInformation.ClinicalPresentation",
+          "text": "Clinical presentation",
+          "type": "string"
+        },
+        {
+          "linkId": "HistopathologyRequestSoftTissueBiopsy.ClinicalInformation.SoftTissueBiopsyHistoClinicalInformation.Spread",
+          "text": "Spread",
+          "type": "string"
+        },
+        {
+          "linkId": "HistopathologyRequestSoftTissueBiopsy.ClinicalInformation.SoftTissueBiopsyHistoClinicalInformation.PreviousRelevantPathology",
+          "text": "Previous relevant pathology",
+          "type": "string"
+        },
+        {
+          "linkId": "HistopathologyRequestSoftTissueBiopsy.ClinicalInformation.SoftTissueBiopsyHistoClinicalInformation.Radiology",
+          "text": "Radiology",
+          "type": "string"
+        },
+        {
+          "linkId": "HistopathologyRequestSoftTissueBiopsy.ClinicalInformation.SoftTissueBiopsyHistoClinicalInformation.ClinicalFinding",
+          "text": "Clinical finding",
+          "type": "string"
+        }
+      ]
+    }
+  ]
+}

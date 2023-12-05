@@ -1,0 +1,716 @@
+{
+  "resourceType": "Bundle",
+  "id": "2bbb00f7-13e8-4b3a-b822-e901513019cb",
+  "meta": {
+    "lastUpdated": "2023-12-05T20:03:30.442+00:00"
+  },
+  "type": "searchset",
+  "link": [ {
+    "relation": "self",
+    "url": "https://hapi.fhir.org/baseR4/Observation?_format=json&_pretty=true"
+  }, {
+    "relation": "next",
+    "url": "https://hapi.fhir.org/baseR4?_getpages=2bbb00f7-13e8-4b3a-b822-e901513019cb&_getpagesoffset=20&_count=20&_format=json&_pretty=true&_bundletype=searchset"
+  } ],
+  "entry": [ {
+    "fullUrl": "https://hapi.fhir.org/baseR4/Observation/8892394",
+    "resource": {
+      "resourceType": "Observation",
+      "id": "8892394",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2023-03-28T11:47:32.638+00:00",
+        "source": "#kfVW4VF0cQM8qBJe"
+      },
+      "status": "final",
+      "code": {
+        "coding": [ {
+          "system": "http://loinc.org",
+          "code": "8867-4",
+          "display": "Heart rate"
+        } ]
+      },
+      "subject": {
+        "reference": "Patient/7304958"
+      },
+      "effectivePeriod": {
+        "start": "2023-03-25T20:10:00.000+00:00",
+        "end": "2023-03-25T20:10:00.000+00:00"
+      },
+      "valueQuantity": {
+        "value": 68.0,
+        "unit": "beats/min",
+        "system": "http://unitsofmeasure.org",
+        "code": "/min"
+      }
+    },
+    "search": {
+      "mode": "match"
+    }
+  }, {
+    "fullUrl": "https://hapi.fhir.org/baseR4/Observation/8892395",
+    "resource": {
+      "resourceType": "Observation",
+      "id": "8892395",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2023-03-28T11:47:32.696+00:00",
+        "source": "#kfVW4VF0cQM8qBJe"
+      },
+      "status": "final",
+      "code": {
+        "coding": [ {
+          "system": "http://loinc.org",
+          "code": "8867-4",
+          "display": "Heart rate"
+        } ]
+      },
+      "subject": {
+        "reference": "Patient/7304958"
+      },
+      "effectivePeriod": {
+        "start": "2023-03-25T20:11:00.000+00:00",
+        "end": "2023-03-25T20:11:00.000+00:00"
+      },
+      "valueQuantity": {
+        "value": 66.0,
+        "unit": "beats/min",
+        "system": "http://unitsofmeasure.org",
+        "code": "/min"
+      }
+    },
+    "search": {
+      "mode": "match"
+    }
+  }, {
+    "fullUrl": "https://hapi.fhir.org/baseR4/Observation/8892396",
+    "resource": {
+      "resourceType": "Observation",
+      "id": "8892396",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2023-03-28T11:47:32.741+00:00",
+        "source": "#kfVW4VF0cQM8qBJe"
+      },
+      "status": "final",
+      "code": {
+        "coding": [ {
+          "system": "http://loinc.org",
+          "code": "8867-4",
+          "display": "Heart rate"
+        } ]
+      },
+      "subject": {
+        "reference": "Patient/7304958"
+      },
+      "effectivePeriod": {
+        "start": "2023-03-25T20:12:00.000+00:00",
+        "end": "2023-03-25T20:12:00.000+00:00"
+      },
+      "valueQuantity": {
+        "value": 66.0,
+        "unit": "beats/min",
+        "system": "http://unitsofmeasure.org",
+        "code": "/min"
+      }
+    },
+    "search": {
+      "mode": "match"
+    }
+  }, {
+    "fullUrl": "https://hapi.fhir.org/baseR4/Observation/8892397",
+    "resource": {
+      "resourceType": "Observation",
+      "id": "8892397",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2023-03-28T11:47:32.783+00:00",
+        "source": "#kfVW4VF0cQM8qBJe"
+      },
+      "status": "final",
+      "code": {
+        "coding": [ {
+          "system": "http://loinc.org",
+          "code": "8867-4",
+          "display": "Heart rate"
+        } ]
+      },
+      "subject": {
+        "reference": "Patient/7304958"
+      },
+      "effectivePeriod": {
+        "start": "2023-03-25T20:13:00.000+00:00",
+        "end": "2023-03-25T20:13:00.000+00:00"
+      },
+      "valueQuantity": {
+        "value": 71.0,
+        "unit": "beats/min",
+        "system": "http://unitsofmeasure.org",
+        "code": "/min"
+      }
+    },
+    "search": {
+      "mode": "match"
+    }
+  }, {
+    "fullUrl": "https://hapi.fhir.org/baseR4/Observation/8892398",
+    "resource": {
+      "resourceType": "Observation",
+      "id": "8892398",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2023-03-28T11:47:32.834+00:00",
+        "source": "#kfVW4VF0cQM8qBJe"
+      },
+      "status": "final",
+      "code": {
+        "coding": [ {
+          "system": "http://loinc.org",
+          "code": "8867-4",
+          "display": "Heart rate"
+        } ]
+      },
+      "subject": {
+        "reference": "Patient/7304958"
+      },
+      "effectivePeriod": {
+        "start": "2023-03-25T20:14:00.000+00:00",
+        "end": "2023-03-25T20:14:00.000+00:00"
+      },
+      "valueQuantity": {
+        "value": 68.0,
+        "unit": "beats/min",
+        "system": "http://unitsofmeasure.org",
+        "code": "/min"
+      }
+    },
+    "search": {
+      "mode": "match"
+    }
+  }, {
+    "fullUrl": "https://hapi.fhir.org/baseR4/Observation/8892399",
+    "resource": {
+      "resourceType": "Observation",
+      "id": "8892399",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2023-03-28T11:47:32.883+00:00",
+        "source": "#kfVW4VF0cQM8qBJe"
+      },
+      "status": "final",
+      "code": {
+        "coding": [ {
+          "system": "http://loinc.org",
+          "code": "8867-4",
+          "display": "Heart rate"
+        } ]
+      },
+      "subject": {
+        "reference": "Patient/7304958"
+      },
+      "effectivePeriod": {
+        "start": "2023-03-25T20:15:00.000+00:00",
+        "end": "2023-03-25T20:15:00.000+00:00"
+      },
+      "valueQuantity": {
+        "value": 66.0,
+        "unit": "beats/min",
+        "system": "http://unitsofmeasure.org",
+        "code": "/min"
+      }
+    },
+    "search": {
+      "mode": "match"
+    }
+  }, {
+    "fullUrl": "https://hapi.fhir.org/baseR4/Observation/8892400",
+    "resource": {
+      "resourceType": "Observation",
+      "id": "8892400",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2023-03-28T11:47:32.923+00:00",
+        "source": "#kfVW4VF0cQM8qBJe"
+      },
+      "status": "final",
+      "code": {
+        "coding": [ {
+          "system": "http://loinc.org",
+          "code": "8867-4",
+          "display": "Heart rate"
+        } ]
+      },
+      "subject": {
+        "reference": "Patient/7304958"
+      },
+      "effectivePeriod": {
+        "start": "2023-03-25T20:16:00.000+00:00",
+        "end": "2023-03-25T20:16:00.000+00:00"
+      },
+      "valueQuantity": {
+        "value": 70.0,
+        "unit": "beats/min",
+        "system": "http://unitsofmeasure.org",
+        "code": "/min"
+      }
+    },
+    "search": {
+      "mode": "match"
+    }
+  }, {
+    "fullUrl": "https://hapi.fhir.org/baseR4/Observation/8892401",
+    "resource": {
+      "resourceType": "Observation",
+      "id": "8892401",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2023-03-28T11:47:32.962+00:00",
+        "source": "#kfVW4VF0cQM8qBJe"
+      },
+      "status": "final",
+      "code": {
+        "coding": [ {
+          "system": "http://loinc.org",
+          "code": "8867-4",
+          "display": "Heart rate"
+        } ]
+      },
+      "subject": {
+        "reference": "Patient/7304958"
+      },
+      "effectivePeriod": {
+        "start": "2023-03-25T20:17:00.000+00:00",
+        "end": "2023-03-25T20:17:00.000+00:00"
+      },
+      "valueQuantity": {
+        "value": 71.0,
+        "unit": "beats/min",
+        "system": "http://unitsofmeasure.org",
+        "code": "/min"
+      }
+    },
+    "search": {
+      "mode": "match"
+    }
+  }, {
+    "fullUrl": "https://hapi.fhir.org/baseR4/Observation/8892402",
+    "resource": {
+      "resourceType": "Observation",
+      "id": "8892402",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2023-03-28T11:47:33.005+00:00",
+        "source": "#kfVW4VF0cQM8qBJe"
+      },
+      "status": "final",
+      "code": {
+        "coding": [ {
+          "system": "http://loinc.org",
+          "code": "8867-4",
+          "display": "Heart rate"
+        } ]
+      },
+      "subject": {
+        "reference": "Patient/7304958"
+      },
+      "effectivePeriod": {
+        "start": "2023-03-25T20:18:00.000+00:00",
+        "end": "2023-03-25T20:18:00.000+00:00"
+      },
+      "valueQuantity": {
+        "value": 70.0,
+        "unit": "beats/min",
+        "system": "http://unitsofmeasure.org",
+        "code": "/min"
+      }
+    },
+    "search": {
+      "mode": "match"
+    }
+  }, {
+    "fullUrl": "https://hapi.fhir.org/baseR4/Observation/8892403",
+    "resource": {
+      "resourceType": "Observation",
+      "id": "8892403",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2023-03-28T11:47:33.046+00:00",
+        "source": "#kfVW4VF0cQM8qBJe"
+      },
+      "status": "final",
+      "code": {
+        "coding": [ {
+          "system": "http://loinc.org",
+          "code": "8867-4",
+          "display": "Heart rate"
+        } ]
+      },
+      "subject": {
+        "reference": "Patient/7304958"
+      },
+      "effectivePeriod": {
+        "start": "2023-03-25T20:19:00.000+00:00",
+        "end": "2023-03-25T20:19:00.000+00:00"
+      },
+      "valueQuantity": {
+        "value": 69.0,
+        "unit": "beats/min",
+        "system": "http://unitsofmeasure.org",
+        "code": "/min"
+      }
+    },
+    "search": {
+      "mode": "match"
+    }
+  }, {
+    "fullUrl": "https://hapi.fhir.org/baseR4/Observation/8892404",
+    "resource": {
+      "resourceType": "Observation",
+      "id": "8892404",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2023-03-28T11:47:33.085+00:00",
+        "source": "#kfVW4VF0cQM8qBJe"
+      },
+      "status": "final",
+      "code": {
+        "coding": [ {
+          "system": "http://loinc.org",
+          "code": "8867-4",
+          "display": "Heart rate"
+        } ]
+      },
+      "subject": {
+        "reference": "Patient/7304958"
+      },
+      "effectivePeriod": {
+        "start": "2023-03-25T20:20:00.000+00:00",
+        "end": "2023-03-25T20:20:00.000+00:00"
+      },
+      "valueQuantity": {
+        "value": 67.0,
+        "unit": "beats/min",
+        "system": "http://unitsofmeasure.org",
+        "code": "/min"
+      }
+    },
+    "search": {
+      "mode": "match"
+    }
+  }, {
+    "fullUrl": "https://hapi.fhir.org/baseR4/Observation/8892405",
+    "resource": {
+      "resourceType": "Observation",
+      "id": "8892405",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2023-03-28T11:47:33.127+00:00",
+        "source": "#kfVW4VF0cQM8qBJe"
+      },
+      "status": "final",
+      "code": {
+        "coding": [ {
+          "system": "http://loinc.org",
+          "code": "8867-4",
+          "display": "Heart rate"
+        } ]
+      },
+      "subject": {
+        "reference": "Patient/7304958"
+      },
+      "effectivePeriod": {
+        "start": "2023-03-25T20:21:00.000+00:00",
+        "end": "2023-03-25T20:21:00.000+00:00"
+      },
+      "valueQuantity": {
+        "value": 71.0,
+        "unit": "beats/min",
+        "system": "http://unitsofmeasure.org",
+        "code": "/min"
+      }
+    },
+    "search": {
+      "mode": "match"
+    }
+  }, {
+    "fullUrl": "https://hapi.fhir.org/baseR4/Observation/8892406",
+    "resource": {
+      "resourceType": "Observation",
+      "id": "8892406",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2023-03-28T11:47:33.184+00:00",
+        "source": "#kfVW4VF0cQM8qBJe"
+      },
+      "status": "final",
+      "code": {
+        "coding": [ {
+          "system": "http://loinc.org",
+          "code": "8867-4",
+          "display": "Heart rate"
+        } ]
+      },
+      "subject": {
+        "reference": "Patient/7304958"
+      },
+      "effectivePeriod": {
+        "start": "2023-03-25T20:22:00.000+00:00",
+        "end": "2023-03-25T20:22:00.000+00:00"
+      },
+      "valueQuantity": {
+        "value": 70.0,
+        "unit": "beats/min",
+        "system": "http://unitsofmeasure.org",
+        "code": "/min"
+      }
+    },
+    "search": {
+      "mode": "match"
+    }
+  }, {
+    "fullUrl": "https://hapi.fhir.org/baseR4/Observation/8892407",
+    "resource": {
+      "resourceType": "Observation",
+      "id": "8892407",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2023-03-28T11:47:33.236+00:00",
+        "source": "#kfVW4VF0cQM8qBJe"
+      },
+      "status": "final",
+      "code": {
+        "coding": [ {
+          "system": "http://loinc.org",
+          "code": "8867-4",
+          "display": "Heart rate"
+        } ]
+      },
+      "subject": {
+        "reference": "Patient/7304958"
+      },
+      "effectivePeriod": {
+        "start": "2023-03-25T20:23:00.000+00:00",
+        "end": "2023-03-25T20:23:00.000+00:00"
+      },
+      "valueQuantity": {
+        "value": 73.0,
+        "unit": "beats/min",
+        "system": "http://unitsofmeasure.org",
+        "code": "/min"
+      }
+    },
+    "search": {
+      "mode": "match"
+    }
+  }, {
+    "fullUrl": "https://hapi.fhir.org/baseR4/Observation/8892408",
+    "resource": {
+      "resourceType": "Observation",
+      "id": "8892408",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2023-03-28T11:47:33.288+00:00",
+        "source": "#kfVW4VF0cQM8qBJe"
+      },
+      "status": "final",
+      "code": {
+        "coding": [ {
+          "system": "http://loinc.org",
+          "code": "8867-4",
+          "display": "Heart rate"
+        } ]
+      },
+      "subject": {
+        "reference": "Patient/7304958"
+      },
+      "effectivePeriod": {
+        "start": "2023-03-25T20:24:00.000+00:00",
+        "end": "2023-03-25T20:24:00.000+00:00"
+      },
+      "valueQuantity": {
+        "value": 76.0,
+        "unit": "beats/min",
+        "system": "http://unitsofmeasure.org",
+        "code": "/min"
+      }
+    },
+    "search": {
+      "mode": "match"
+    }
+  }, {
+    "fullUrl": "https://hapi.fhir.org/baseR4/Observation/8892409",
+    "resource": {
+      "resourceType": "Observation",
+      "id": "8892409",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2023-03-28T11:47:33.326+00:00",
+        "source": "#kfVW4VF0cQM8qBJe"
+      },
+      "status": "final",
+      "code": {
+        "coding": [ {
+          "system": "http://loinc.org",
+          "code": "8867-4",
+          "display": "Heart rate"
+        } ]
+      },
+      "subject": {
+        "reference": "Patient/7304958"
+      },
+      "effectivePeriod": {
+        "start": "2023-03-25T20:25:00.000+00:00",
+        "end": "2023-03-25T20:25:00.000+00:00"
+      },
+      "valueQuantity": {
+        "value": 69.0,
+        "unit": "beats/min",
+        "system": "http://unitsofmeasure.org",
+        "code": "/min"
+      }
+    },
+    "search": {
+      "mode": "match"
+    }
+  }, {
+    "fullUrl": "https://hapi.fhir.org/baseR4/Observation/8892410",
+    "resource": {
+      "resourceType": "Observation",
+      "id": "8892410",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2023-03-28T11:47:33.369+00:00",
+        "source": "#kfVW4VF0cQM8qBJe"
+      },
+      "status": "final",
+      "code": {
+        "coding": [ {
+          "system": "http://loinc.org",
+          "code": "8867-4",
+          "display": "Heart rate"
+        } ]
+      },
+      "subject": {
+        "reference": "Patient/7304958"
+      },
+      "effectivePeriod": {
+        "start": "2023-03-25T20:26:00.000+00:00",
+        "end": "2023-03-25T20:26:00.000+00:00"
+      },
+      "valueQuantity": {
+        "value": 72.0,
+        "unit": "beats/min",
+        "system": "http://unitsofmeasure.org",
+        "code": "/min"
+      }
+    },
+    "search": {
+      "mode": "match"
+    }
+  }, {
+    "fullUrl": "https://hapi.fhir.org/baseR4/Observation/8892411",
+    "resource": {
+      "resourceType": "Observation",
+      "id": "8892411",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2023-03-28T11:47:33.409+00:00",
+        "source": "#kfVW4VF0cQM8qBJe"
+      },
+      "status": "final",
+      "code": {
+        "coding": [ {
+          "system": "http://loinc.org",
+          "code": "8867-4",
+          "display": "Heart rate"
+        } ]
+      },
+      "subject": {
+        "reference": "Patient/7304958"
+      },
+      "effectivePeriod": {
+        "start": "2023-03-25T20:27:00.000+00:00",
+        "end": "2023-03-25T20:27:00.000+00:00"
+      },
+      "valueQuantity": {
+        "value": 69.0,
+        "unit": "beats/min",
+        "system": "http://unitsofmeasure.org",
+        "code": "/min"
+      }
+    },
+    "search": {
+      "mode": "match"
+    }
+  }, {
+    "fullUrl": "https://hapi.fhir.org/baseR4/Observation/8892412",
+    "resource": {
+      "resourceType": "Observation",
+      "id": "8892412",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2023-03-28T11:47:33.450+00:00",
+        "source": "#kfVW4VF0cQM8qBJe"
+      },
+      "status": "final",
+      "code": {
+        "coding": [ {
+          "system": "http://loinc.org",
+          "code": "8867-4",
+          "display": "Heart rate"
+        } ]
+      },
+      "subject": {
+        "reference": "Patient/7304958"
+      },
+      "effectivePeriod": {
+        "start": "2023-03-25T20:28:00.000+00:00",
+        "end": "2023-03-25T20:28:00.000+00:00"
+      },
+      "valueQuantity": {
+        "value": 68.0,
+        "unit": "beats/min",
+        "system": "http://unitsofmeasure.org",
+        "code": "/min"
+      }
+    },
+    "search": {
+      "mode": "match"
+    }
+  }, {
+    "fullUrl": "https://hapi.fhir.org/baseR4/Observation/8892413",
+    "resource": {
+      "resourceType": "Observation",
+      "id": "8892413",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2023-03-28T11:47:33.509+00:00",
+        "source": "#kfVW4VF0cQM8qBJe"
+      },
+      "status": "final",
+      "code": {
+        "coding": [ {
+          "system": "http://loinc.org",
+          "code": "8867-4",
+          "display": "Heart rate"
+        } ]
+      },
+      "subject": {
+        "reference": "Patient/7304958"
+      },
+      "effectivePeriod": {
+        "start": "2023-03-25T20:29:00.000+00:00",
+        "end": "2023-03-25T20:29:00.000+00:00"
+      },
+      "valueQuantity": {
+        "value": 67.0,
+        "unit": "beats/min",
+        "system": "http://unitsofmeasure.org",
+        "code": "/min"
+      }
+    },
+    "search": {
+      "mode": "match"
+    }
+  } ]
+}
