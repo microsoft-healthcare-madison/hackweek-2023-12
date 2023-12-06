@@ -98,6 +98,7 @@ const resultSchema = `interface Result {
   items: {
     linkId: string; // The linkId of an item in the questionnaire
     associatedNonDirectChildLinkIds: string[]; // the linkId of other items in the questionnaire that have some relationship with it, including if they just provide important context or information for how to answer the item. Might be ancestors, siblings, or children of the item with the provided linkId.
+    summary: string; // a consise summary of the overall purpose of the item and its children (in markdown format), in the context of it's direct parent.
     associationReason: string; // how these items are associated and what guidance should be given to the user to enter the data (in markdown format)
   }[] // array of items
 }`;
