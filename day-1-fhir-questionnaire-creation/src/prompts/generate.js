@@ -122,7 +122,8 @@ Respond with a FHIR JSON Questionnaire object.`,
   const MAX_ATTEMPTS = 3;
   let attempts = 0;
   let initialJson;
-  let useModel = "gpt-3.5-turbo-1106";
+  //let useModel = "gpt-3.5-turbo-1106";
+  let useModel = "gpt-4-1106-preview";
   do {
     if (callbackProgressText) callbackProgressText("generating ...");
     let response = await client.chat.completions.create({
@@ -264,8 +265,7 @@ Respond with a JSON Response object.`,
     },
   ];
   let response = await client.chat.completions.create({
-    // model: 'gpt-4-1106-preview',
-    model: "gpt-3.5-turbo-1106",
+    model: 'gpt-4-1106-preview',
     temperature: 1.0,
     response_format: { type: "json_object" },
     messages,

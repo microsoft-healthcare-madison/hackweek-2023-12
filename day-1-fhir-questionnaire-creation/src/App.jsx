@@ -109,6 +109,7 @@ const Preview = (props) => {
   return (
     <div id="formcontainer">
       <SmartFormsRenderer
+        onFocus={(linkId) => {console.log("Focused on", linkId)}}
         questionnaire={props.questionnaire}
         questionnaireResponse={props.questionnaireResponse}
       />
