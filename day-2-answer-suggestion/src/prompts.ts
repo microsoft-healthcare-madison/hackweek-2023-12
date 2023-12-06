@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { QuestionnaireItem } from "./types";
+import { QuestionnaireItem } from "fhir/r4";
 import { ChatCompletionMessage } from "openai/resources/index.mjs";
 import { CacheManager } from "./CacheManager";
 
@@ -15,7 +15,7 @@ export async function identifyKeywordsForQuestion(
   config?: { skipCache: boolean }
 ) {
   if (!config?.skipCache) {
-    const cachedResult = kwCache.get(q.text);
+    const cachedResult = kwCache.get(q.text ?? q.linkId);
     if (cachedResult) {
       return cachedResult;
     }
@@ -129,7 +129,7 @@ type Keywords {
     ],
   });
   const ret = JSON.parse(response.choices[0].message.content!);
-  kwCache.set(q.text, ret);
+  kwCache.set(q.text ?? q.linkId, ret);
   return ret;
 }
 
@@ -140,7 +140,7 @@ export async function createFactModelForQuestion(
   config?: { skipCache: boolean }
 ) {
   if (!config?.skipCache) {
-    const cachedResult = factModelCache.get(q.text);
+    const cachedResult = factModelCache.get(q.text ?? q.linkId);
     if (cachedResult) {
       return cachedResult;
     }
@@ -179,7 +179,7 @@ Provide detailed commentary as instructions for the data abstraction team. They 
     messages: messages as ChatCompletionMessage[],
   });
   const ret = response.choices[0].message.content;
-  factModelCache.set(q.text, ret);
+  factModelCache.set(q.text ?? q.linkId, ret);
   return ret;
 }
 

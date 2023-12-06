@@ -8,23 +8,26 @@ import {
 import { Keywords } from "./types";
 dotenv.config();
 
-interface Questionnaire {
-  resourceType: "Questionnaire";
-  item: any[];
-}
-function extractItemFromQuestionnaire(q: Questionnaire, linkId: string) {
-  let result: any = null;
-  for (let item of q.item) {
-    if (item.linkId === linkId) {
-      result = item;
-    } else {
-      result = extractItemFromQuestionnaire(item, linkId);
-    }
-    if (result) {
-      break;
-    }
+import { Questionnaire, QuestionnaireItem } from "fhir/r4";
+
+function extractItemFromQuestionnaire(q: Questionnaire, linkId: string) : QuestionnaireItem | undefined {
+  if (q.item) {
+    return extractItemFromQuestionnaireItems(item, linkId);
   }
-  return result;
+  return undefined;
+}
+
+function extractItemFromQuestionnaireItems(items: QuestionnaireItem[], linkId: string) : QuestionnaireItem | undefined {
+    for (let item of items) {
+      if (item.linkId === linkId) {
+        return item;
+      }
+      if (item.item) {
+        let result = extractItemFromQuestionnaireItems(item.item, linkId);
+        if (result) return result;
+      }
+    }
+    return undefined;
 }
 
 function applyRegex(expression: Keywords | string, input: string): boolean {
