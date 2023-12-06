@@ -56,4 +56,4 @@ flowchart TD
 
 # Side Quests
 
-* Getting models to pick the best LOINC codes. Previous work used function calling -- but Code Interpreter provides an even tighter feedback look. [Example Transcript]([url](https://chat.openai.com/share/6040b73f-e46d-4440-a15b-89a96e210f30)https://chat.openai.com/share/6040b73f-e46d-4440-a15b-89a96e210f30)
+* Getting models to pick the best LOINC codes. Previous work used function calling -- but Code Interpreter provides an even tighter feedback look. [Example Transcript](https://chat.openai.com/share/6040b73f-e46d-4440-a15b-89a96e210f30)
