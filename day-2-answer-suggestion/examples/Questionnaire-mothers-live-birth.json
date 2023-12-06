@@ -1,0 +1,756 @@
+{
+    "resourceType": "Questionnaire",
+    "id": "Questionnaire-mothers-live-birth",
+    "url": "http://hl7.org/fhir/us/bfdr/Questionnaire/Questionnaire-mothers-live-birth",
+    "version": "2.0.0-ballot",
+    "name": "QuestionnaireMothersWorksheetChildsBirthCertificate",
+    "title": "Questionnaire - Mother's Worksheet for Child's Birth Certificate",
+    "status": "draft",
+    "experimental": false,
+    "subjectType": [
+        "Patient"
+    ],
+    "date": "2023-12-05T15:52:55+00:00",
+    "item": [
+        {
+            "linkId": "intro",
+            "text": "The information you provide below will be used to create your child’s birth certificate. The birth certificate is a document that will be used for legal purposes to prove your child’s age, citizenship and parentage. This document will be used by your child throughout his/her life. State laws provide protection against the unauthorized release of identifying information from the birth certificates to ensure the confidentiality of the parents and their child.\n            \n            It is very important that you provide complete and accurate information to all of the questions. In addition to information used for legal purposes, other information from the birth certificate is used by health and medical researchers to study and improve the health of mothers and newborn infants. Items such as parent’s education, race, and smoking will be used for studies but will not appear on copies of the birth certificate issued to you or your child. \n            \n            All information on the mother should be for the woman who delivered the infant. In cases of surrogacy or gestational carrier, the information reported should be that for the surrogate or the gestational carrier, that is, the woman who delivered the infant.",
+            "type": "display"
+        },
+        {
+            "linkId": "mother-current-legal-name",
+            "prefix": "1",
+            "text": "What is your current legal name?",
+            "type": "group",
+            "repeats": false,
+            "item": [
+                {
+                    "linkId": "mother-first-name",
+                    "text": "First",
+                    "type": "string"
+                },
+                {
+                    "linkId": "mother-middle-name",
+                    "text": "Middle",
+                    "type": "string"
+                },
+                {
+                    "linkId": "mother-last-name",
+                    "text": "Last",
+                    "type": "string"
+                },
+                {
+                    "linkId": "mother-suffix",
+                    "text": "Suffix (Jr., III, etc.)",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "linkId": "child-name",
+            "prefix": "2",
+            "text": "What will be your baby's legal name (as it should appear on the birth certificate)?",
+            "type": "group",
+            "repeats": false,
+            "item": [
+                {
+                    "linkId": "child-first-name",
+                    "text": "First",
+                    "type": "string"
+                },
+                {
+                    "linkId": "child-middle-name",
+                    "text": "Middle",
+                    "type": "string"
+                },
+                {
+                    "linkId": "child-last-name",
+                    "text": "Last",
+                    "type": "string"
+                },
+                {
+                    "linkId": "child-suffix",
+                    "text": "Suffix (Jr., III, etc.)",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "linkId": "mother-address",
+            "prefix": "3",
+            "text": "Where do you usually live - that is - where is your household/residence located?",
+            "type": "group",
+            "item": [
+                {
+                    "linkId": "mother-nbr-street",
+                    "text": "Complete number and street (do not enter rural route numbers)",
+                    "type": "string"
+                },
+                {
+                    "linkId": "mother-apt-nbr",
+                    "text": "Apartment Number",
+                    "type": "string"
+                },
+                {
+                    "linkId": "mother-city",
+                    "text": "City, Town, or Location",
+                    "type": "string"
+                },
+                {
+                    "linkId": "mother-county",
+                    "text": "County",
+                    "type": "string"
+                },
+                {
+                    "linkId": "mother-state",
+                    "text": "State (or U.S. Territory, Canadian Province)",
+                    "type": "string"
+                },
+                {
+                    "linkId": "mother-zip",
+                    "text": "Zip Code",
+                    "type": "string"
+                },
+                {
+                    "linkId": "mother-country",
+                    "text": "If not in the United States, country",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "linkId": "inside-city-limits",
+            "prefix": "4",
+            "text": "Is this household inside city limits (inside the incorporated limits of the city, town, or location where you live)?",
+            "type": "choice",
+            "answerValueSet": "http://hl7.org/fhir/us/vr-common-library/ValueSet/ValueSet-yes-no-unknown-vr"
+        },
+        {
+            "linkId": "mother-mail",
+            "prefix": "5",
+            "text": "What is your mailing address",
+            "type": "group",
+            "repeats": false,
+            "item": [
+                {
+                    "linkId": "mother-mail-same",
+                    "text": "Same as residence [Go to next question]",
+                    "type": "boolean"
+                },
+                {
+                    "linkId": "mother-mail-nbr-street",
+                    "text": "Complete number and street",
+                    "type": "string",
+                    "enableWhen": [
+                        {
+                            "question": "mother-mail-same",
+                            "operator": "=",
+                            "answerBoolean": false
+                        }
+                    ]
+                },
+                {
+                    "linkId": "mother-mail-apt-nbr",
+                    "text": "Apartment Number",
+                    "type": "string",
+                    "enableWhen": [
+                        {
+                            "question": "mother-mail-same",
+                            "operator": "=",
+                            "answerBoolean": false
+                        }
+                    ]
+                },
+                {
+                    "linkId": "mother-mail-po-box",
+                    "text": "P.O. Box",
+                    "type": "string",
+                    "enableWhen": [
+                        {
+                            "question": "mother-mail-same",
+                            "operator": "=",
+                            "answerBoolean": false
+                        }
+                    ]
+                },
+                {
+                    "linkId": "mother-mail-city",
+                    "text": "City, Town, or Location",
+                    "type": "string",
+                    "enableWhen": [
+                        {
+                            "question": "mother-mail-same",
+                            "operator": "=",
+                            "answerBoolean": false
+                        }
+                    ]
+                },
+                {
+                    "linkId": "mother-mail-state",
+                    "text": "State (or U.S. Territory, Canadian Province)",
+                    "type": "string",
+                    "enableWhen": [
+                        {
+                            "question": "mother-mail-same",
+                            "operator": "=",
+                            "answerBoolean": false
+                        }
+                    ]
+                },
+                {
+                    "linkId": "mother-mail-zip",
+                    "text": "Zip Code",
+                    "type": "string",
+                    "enableWhen": [
+                        {
+                            "question": "mother-mail-same",
+                            "operator": "=",
+                            "answerBoolean": false
+                        }
+                    ]
+                },
+                {
+                    "linkId": "mother-mail-country",
+                    "text": "If not in the United States, country",
+                    "type": "string",
+                    "enableWhen": [
+                        {
+                            "question": "mother-mail-same",
+                            "operator": "=",
+                            "answerBoolean": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "linkId": "mother-dob",
+            "prefix": "6",
+            "text": "What is your date of birth?",
+            "type": "date",
+            "repeats": false
+        },
+        {
+            "linkId": "mother-birthplace",
+            "prefix": "7",
+            "text": "In what State, U.S. territory, or foreign country were you born? Please specify one of the following:",
+            "type": "group",
+            "repeats": false,
+            "item": [
+                {
+                    "linkId": "mother-birthplace-state",
+                    "text": "State",
+                    "type": "string"
+                },
+                {
+                    "linkId": "mother-birthplace-territory",
+                    "text": "or U.S. territory, i.e., Puerto Rico, U.S. Virgin Islands, Guam, American Samoa or Norther Marianas",
+                    "type": "string"
+                },
+                {
+                    "linkId": "mother-birthplace-country",
+                    "text": "or Foreign country",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "linkId": "mother-education",
+            "definition": "Observation.value",
+            "code": [
+                {
+                    "system": "http://loinc.org",
+                    "code": "57712-2",
+                    "display": "Highest level of education Mother"
+                }
+            ],
+            "prefix": "8",
+            "text": "What is the highest level of schooling that you have completed at the time of delivery? (Check the box that best describes your education. If you are currently enrolled, check the box that indicates the previous grade or highest degree received).",
+            "type": "choice",
+            "repeats": false,
+            "answerValueSet": "http://hl7.org/fhir/us/vr-common-library/ValueSet/ValueSet-education-level-vr"
+        },
+        {
+            "linkId": "mother-ethnicity",
+            "prefix": "9",
+            "text": "Are you Spanish/Hispanic/Latina? If not Spanish/Hispanic/Latina, check the “No” box. If Spanish/Hispanic/Latina, check the appropriate box.",
+            "type": "group",
+            "repeats": false,
+            "item": [
+                {
+                    "linkId": "mother-shl",
+                    "text": "Are you Spanish/Hispanic/Latina",
+                    "type": "choice",
+                    "repeats": true,
+                    "answerValueSet": "http://hl7.org/fhir/us/core/ValueSet/omb-ethnicity-category"
+                },
+                {
+                    "linkId": "mother-detailed-shl",
+                    "text": "If Spanish/Hispanic/Latina, check the appropriate box.",
+                    "type": "choice",
+                    "enableWhen": [
+                        {
+                            "question": "mother-shl",
+                            "operator": "=",
+                            "answerCoding": {
+                                "system": "urn:oid:2.16.840.1.113883.6.238",
+                                "code": "2135-2"
+                            }
+                        }
+                    ],
+                    "repeats": false,
+                    "answerValueSet": "http://hl7.org/fhir/us/core/ValueSet/detailed-ethnicity"
+                }
+            ]
+        },
+        {
+            "linkId": "mother-race",
+            "prefix": "10",
+            "text": "What is your race? (Please check one or more races to indicate what you consider yourself to be).",
+            "type": "group",
+            "repeats": false,
+            "item": [
+                {
+                    "linkId": "mother-race-category",
+                    "text": "Race categories",
+                    "type": "choice",
+                    "repeats": true,
+                    "answerValueSet": "http://hl7.org/fhir/us/core/ValueSet/omb-race-category"
+                },
+                {
+                    "linkId": "mother-detailed-race",
+                    "text": "Extended race codes",
+                    "type": "choice",
+                    "repeats": true,
+                    "answerValueSet": "http://hl7.org/fhir/us/core/ValueSet/detailed-race"
+                }
+            ]
+        },
+        {
+            "linkId": "receive-wic",
+            "definition": "Observation.code",
+            "prefix": "11",
+            "text": "Did you receive WIC (Women, Infants and Children) food for yourself during this pregnancy?",
+            "type": "choice",
+            "repeats": false,
+            "answerValueSet": "http://hl7.org/fhir/us/vr-common-library/ValueSet/ValueSet-yes-no-unknown-vr"
+        },
+        {
+            "linkId": "infertility-treatment",
+            "prefix": "12",
+            "text": "Did this pregnancy result from infertility treatment? (If yes, please answer 12a and 12b)",
+            "type": "boolean",
+            "item": [
+                {
+                    "linkId": "drugs-ai-ii",
+                    "prefix": "12a",
+                    "text": "If yes, did this pregnancy result from fertility-enhancing drugs, artificial insemination, or intrauterine insemination?",
+                    "type": "boolean",
+                    "repeats": false
+                },
+                {
+                    "linkId": "art-ivf-gift",
+                    "prefix": "12b",
+                    "text": "If yes, did this pregnancy result from assisted reproductive technology (e.g., in-vitro fertilization (IVF), gamete intrafallopian transfer (GIFT))?",
+                    "type": "boolean",
+                    "repeats": false
+                }
+            ]
+        },
+        {
+            "linkId": "mothers-height",
+            "prefix": "13",
+            "text": "What is your height?",
+            "type": "group",
+            "item": [
+                {
+                    "linkId": "mothers-height-feet",
+                    "text": "Feet",
+                    "type": "quantity",
+                    "repeats": false
+                },
+                {
+                    "linkId": "mothers-height-inches",
+                    "text": "Inches",
+                    "type": "quantity",
+                    "repeats": false
+                }
+            ]
+        },
+        {
+            "linkId": "mothers-prepregnancy-weight",
+            "prefix": "14",
+            "text": "lbs",
+            "type": "quantity",
+            "repeats": false
+        },
+        {
+            "linkId": "mothers-smoking",
+            "prefix": "15",
+            "text": "How many cigarettes OR packs of cigarettes did you smoke on an average day during each of the following time periods? If you NEVER smoked, enter zero for each time period.",
+            "type": "group",
+            "item": [
+                {
+                    "linkId": "mothers-smoking-3-months-prior",
+                    "text": "Three months before pregnancy",
+                    "type": "group",
+                    "item": [
+                        {
+                            "linkId": "mothers-smoking-3-months-prior-cig",
+                            "text": "# of cigarettes*",
+                            "type": "integer",
+                            "repeats": false
+                        },
+                        {
+                            "linkId": "mothers-smoking-3-months-prior-pck",
+                            "text": "# of packs",
+                            "type": "integer",
+                            "repeats": false
+                        }
+                    ]
+                },
+                {
+                    "linkId": "mothers-smoking-trimester-1",
+                    "text": "First three months of pregnancy",
+                    "type": "group",
+                    "item": [
+                        {
+                            "linkId": "mothers-smoking-trimester-1-cig",
+                            "text": "# of cigarettes*",
+                            "type": "integer",
+                            "repeats": false
+                        },
+                        {
+                            "linkId": "mothers-smoking-trimester-1-pck",
+                            "text": "# of packs",
+                            "type": "integer",
+                            "repeats": false
+                        }
+                    ]
+                },
+                {
+                    "linkId": "mothers-smoking-trimester-2",
+                    "text": "Second three months of pregnancy",
+                    "type": "group",
+                    "item": [
+                        {
+                            "linkId": "mothers-smoking-trimester-2-cig",
+                            "text": "# of cigarettes*",
+                            "type": "integer",
+                            "repeats": false
+                        },
+                        {
+                            "linkId": "mothers-smoking-trimester-2-pck",
+                            "text": "# of packs",
+                            "type": "integer",
+                            "repeats": false
+                        }
+                    ]
+                },
+                {
+                    "linkId": "mothers-smoking-trimester-3",
+                    "text": "Third trimester of pregnancy",
+                    "type": "group",
+                    "item": [
+                        {
+                            "linkId": "mothers-smoking-trimester-3-cig",
+                            "text": "# of cigarettes*",
+                            "type": "integer",
+                            "repeats": false
+                        },
+                        {
+                            "linkId": "mothers-smoking-trimester-3-pck",
+                            "text": "# of packs",
+                            "type": "integer",
+                            "repeats": false
+                        }
+                    ]
+                },
+                {
+                    "linkId": "cigarette-note",
+                    "text": "*refers to tobacco products only, NOT e-cigarettes.",
+                    "type": "display"
+                }
+            ]
+        },
+        {
+            "linkId": "mother-ever-married",
+            "prefix": "16",
+            "text": "Question 'Have you ever been married?' removed.",
+            "type": "display"
+        },
+        {
+            "linkId": "mother-prior-name",
+            "prefix": "17",
+            "text": "What name did you use prior to your first marriage?",
+            "type": "group",
+            "repeats": false,
+            "item": [
+                {
+                    "linkId": "mother-prior-first-name",
+                    "text": "First",
+                    "type": "string"
+                },
+                {
+                    "linkId": "mother-prior-middle-name",
+                    "text": "Middle",
+                    "type": "string"
+                },
+                {
+                    "linkId": "mother-prior-last-name",
+                    "text": "Last",
+                    "type": "string"
+                },
+                {
+                    "linkId": "mother-prior-suffix",
+                    "text": "Suffix (Jr., III, etc.)",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "linkId": "married-conception",
+            "prefix": "18",
+            "text": "Were you married at the time you conceived this child, at the time of birth, or at any time between conception and giving birth? [If yes, please go to question 19; If no, please see below]",
+            "type": "boolean",
+            "repeats": false,
+            "item": [
+                {
+                    "linkId": "paternity-ack",
+                    "text": "If no, has a paternity acknowledgment been completed? (That is, have you and the father signed a form [insert name of State paternity acknowledgment form] in which the father accepted legal responsibility for the child?) If you were not married, or if a paternity acknowledgment has not been completed, information about the father cannot be included on the birth certificate. Information about the procedures for adding the father’s information to the Birth Certificate after it has been filed can be obtained from the State Vital Statistics Office. [If yes, please go to question 19; If no, please go to question 25]",
+                    "type": "boolean",
+                    "enableWhen": [
+                        {
+                            "question": "married-conception",
+                            "operator": "=",
+                            "answerBoolean": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "linkId": "father-current-legal-name",
+            "prefix": "19",
+            "text": "What is the current legal name of your baby's father?",
+            "type": "group",
+            "repeats": false,
+            "item": [
+                {
+                    "linkId": "father-first-name",
+                    "text": "First",
+                    "type": "string"
+                },
+                {
+                    "linkId": "father-middle-name",
+                    "text": "Middle",
+                    "type": "string"
+                },
+                {
+                    "linkId": "father-last-name",
+                    "text": "Last",
+                    "type": "string"
+                },
+                {
+                    "linkId": "father-suffix",
+                    "text": "Suffix (Jr., III, etc.)",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "linkId": "father-dob",
+            "prefix": "20",
+            "text": "What the father's date of birth?",
+            "type": "date",
+            "repeats": false
+        },
+        {
+            "linkId": "father-birthplace",
+            "prefix": "21",
+            "text": "In what State, U.S. territory, or foreign country was the father born? Please specify one of the following:",
+            "type": "group",
+            "repeats": false,
+            "item": [
+                {
+                    "linkId": "father-birthplace-state",
+                    "text": "State",
+                    "type": "string"
+                },
+                {
+                    "linkId": "father-birthplace-territory",
+                    "text": "or U.S. territory, i.e., Puerto Rico, U.S. Virgin Islands, Guam, American Samoa or Norther Marianas",
+                    "type": "string"
+                },
+                {
+                    "linkId": "father-birthplace-country",
+                    "text": "or Foreign country",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "linkId": "father-education",
+            "code": [
+                {
+                    "system": "http://loinc.org",
+                    "code": "87300-0",
+                    "display": "Highest level of education Father"
+                }
+            ],
+            "prefix": "22",
+            "text": "What is the highest level of schooling that the father will have completed at the time of delivery? (Check the box that best describes his education. If he is currently enrolled, check the box that indicates the previous grade or highest degree received).",
+            "type": "choice",
+            "repeats": false,
+            "answerValueSet": "http://hl7.org/fhir/us/vr-common-library/ValueSet/ValueSet-education-level-vr"
+        },
+        {
+            "linkId": "father-ethnicity",
+            "prefix": "23",
+            "text": "Is the father Spanish/Hispanic/Latina? If not Spanish/Hispanic/Latina, check the “No” box. If Spanish/Hispanic/Latina, check the appropriate box.",
+            "type": "group",
+            "repeats": false,
+            "item": [
+                {
+                    "linkId": "father-shl",
+                    "text": "Is the father Spanish/Hispanic/Latina",
+                    "type": "choice",
+                    "repeats": true,
+                    "answerValueSet": "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.837"
+                },
+                {
+                    "linkId": "father-detailed-shl",
+                    "text": "If Spanish/Hispanic/Latina, check the appropriate box.",
+                    "type": "choice",
+                    "enableWhen": [
+                        {
+                            "question": "father-shl",
+                            "operator": "=",
+                            "answerCoding": {
+                                "system": "urn:oid:2.16.840.1.113883.6.238",
+                                "code": "2135-2"
+                            }
+                        }
+                    ],
+                    "repeats": false,
+                    "answerValueSet": "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.877"
+                }
+            ]
+        },
+        {
+            "linkId": "father-race",
+            "prefix": "24",
+            "text": "What is the father's race? (Please check one or more races to indicate what he considers himself to be).",
+            "type": "group",
+            "repeats": false,
+            "item": [
+                {
+                    "linkId": "father-race-category",
+                    "text": "Race categories",
+                    "type": "choice",
+                    "repeats": true,
+                    "answerValueSet": "http://hl7.org/fhir/us/core/ValueSet/omb-race-category"
+                },
+                {
+                    "linkId": "father-detailed-race",
+                    "text": "Extended race codes",
+                    "type": "choice",
+                    "repeats": true,
+                    "answerValueSet": "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.1.11.14914"
+                }
+            ]
+        },
+        {
+            "linkId": "parents-ssn",
+            "prefix": "25",
+            "text": "Furnishing parent(s) Social Security Number(s) (SSNs) is required by Federal Law, 42 USC 405(c) (section 205(c) of the Social Security Act). The number(s) will be made available to the (State Social Services Agency) to assist with child support enforcement activities and to the Internal Revenue Service for the purpose of determining Earned Income Tax Credit compliance.",
+            "type": "group",
+            "repeats": false,
+            "item": [
+                {
+                    "linkId": "mother-ssn",
+                    "prefix": "25a",
+                    "text": "What is your Social Security Number?",
+                    "type": "string",
+                    "repeats": false
+                },
+                {
+                    "linkId": "father-ssn",
+                    "text": "What is the father’s Social Security Number? If you are not married, and if a paternity acknowledgment has not been completed, leave this item blank.",
+                    "type": "string",
+                    "repeats": false
+                }
+            ]
+        },
+        {
+            "linkId": "baby-ssn",
+            "prefix": "26a",
+            "text": "Do you want a Social Security Number issued for your baby? [If yes, please sign request below",
+            "type": "boolean",
+            "repeats": false
+        },
+        {
+            "linkId": "baby-ssn-sig",
+            "prefix": "26b",
+            "text": "I request that the Social Security Administration assign a Social Security number to the child named on this form and authorize the State to provide the Social Security Administration with the information from this form which is needed to assign a number. (Either parent, or the legal guardian, may sign.)",
+            "type": "group",
+            "repeats": false,
+            "item": [
+                {
+                    "linkId": "baby-ssn-sig-parent",
+                    "text": "Signature of infant's mother or father",
+                    "type": "attachment",
+                    "repeats": false
+                },
+                {
+                    "linkId": "baby-ssn-sig-date",
+                    "text": "Date",
+                    "type": "date",
+                    "repeats": false
+                }
+            ]
+        },
+        {
+            "linkId": "informant-note",
+            "text": "If you are the Mother, please STOP here. If other than the mother please answer the following questions:",
+            "type": "display"
+        },
+        {
+            "linkId": "informant-name",
+            "prefix": "27a",
+            "text": "If other than the mother, what is the name of the person providing information for this worksheet?",
+            "type": "group",
+            "repeats": false,
+            "item": [
+                {
+                    "linkId": "informant-first-name",
+                    "text": "First",
+                    "type": "string"
+                },
+                {
+                    "linkId": "informant-middle-name",
+                    "text": "Middle",
+                    "type": "string"
+                },
+                {
+                    "linkId": "informant-last-name",
+                    "text": "Last",
+                    "type": "string"
+                },
+                {
+                    "linkId": "informant-suffix",
+                    "text": "Suffix (Jr., III, etc.)",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "linkId": "informant-relationship",
+            "prefix": "27a",
+            "text": "What is your relationship to the baby's mother?",
+            "type": "open-choice",
+            "repeats": false,
+            "answerValueSet": "http://hl7.org/fhir/us/bfdr/ValueSet/ValueSet-informant-relationship-to-mother"
+        }
+    ]
+}
