@@ -2,7 +2,7 @@ import { structuredDataCapture } from "fhir-sdc-helpers";
 import { Questionnaire, QuestionnaireItem } from "fhir/r4";
 import { evaluateChatPromptGpt4, evaluateChatPromptGpt35 } from "./openai-helper";
 
-let q = require("./examples/Questionnaire-mothers-live-birth.json");
+let q = require("../examples/Questionnaire-mothers-live-birth.json");
 // console.log('Questionnaire:', q);
 
 /*
