@@ -7,11 +7,19 @@ import DownloadIcon from "@mui/icons-material/Download";
 import { SmartFormsRenderer, getResponse } from "@aehrc/smart-forms-renderer";
 import "./App.css";
 import jsonpatch from "jsonpatch";
+import { setExtensionStringValue } from "fhir-extension-helpers";
+import { structuredDataCapture } from "fhir-sdc-helpers";
 
 import HackweekLogo from "./assets/HackweekLogo.png";
 import { generate, refine, loadQuestionnaireFromUrl } from "./prompts/generate";
+import { GenerateSuggestedAnswer } from "./prompts/generate-answer";
+import {
+  PatchQuestionnaire,
+  PatchQuestionnaireResponse,
+  findItem,
+} from "./prompts/questionnaire-helpers";
 
-console.log(import.meta.env);
+// console.log(import.meta.env);
 
 import { OpenAI } from "openai";
 
@@ -72,7 +80,7 @@ const Category = ({ categoryName, actions, onAction }) => {
 };
 
 // ChatDialog Component
-const ChatDialog = ({ generatingForm }) => {
+const ChatDialog = ({ generatingForm, itemWithFocus }) => {
   const [messages, setMessages] = useState([]);
 
   const handleSendMessage = (event) => {
@@ -93,6 +101,14 @@ const ChatDialog = ({ generatingForm }) => {
       </div>
       {generatingForm ? <LinearProgress /> : <span />}
       <form onSubmit={handleSendMessage}>
+        {itemWithFocus ? (
+          <div className="message">
+            <span className="message-title">Focus:</span>{" "}
+            <span className="message-content">{itemWithFocus.text}</span>
+          </div>
+        ) : (
+          <span />
+        )}
         <input
           className="message"
           type="text"
@@ -109,7 +125,7 @@ const Preview = (props) => {
   return (
     <div id="formcontainer">
       <SmartFormsRenderer
-        onFocus={(linkId) => {console.log("Focused on", linkId)}}
+        onFocus={props.onFocus}
         questionnaire={props.questionnaire}
         questionnaireResponse={props.questionnaireResponse}
       />
@@ -143,6 +159,65 @@ Contacts
   const [questionnaireResponse, setQuestionnaireResponse] = useState("");
   const [questionnaireResponseJson, setQuestionnaireResponseJson] =
     useState("");
+  const [itemWithFocus, setItemWithFocus] = useState(null);
+  const [generatedAnswers, setGeneratedAnswers] = useState([]);
+
+  async function generateSuggestions(linkId) {
+    if (itemWithFocus?.linkId == linkId) {
+      // item already has focus, so don't re-fire the generation
+      return;
+    }
+    const itemDef = findItem(questionnaire.item, linkId);
+    setItemWithFocus(itemDef);
+
+    const qr = getResponse();
+    // if we have some form of suggestion, make it then update it
+    let existingAnswer = findItem(qr.item, linkId);
+
+    if (generatedAnswers.indexOf(linkId) >= 0 && existingAnswer?.answer) {
+      console.log("Already generated suggestions for:", linkId);
+      return;
+    }
+
+    console.log("Look for suggestions to:", linkId);
+    setGeneratingForm(true);
+    setGenerationMsg(
+      "Reviewing patient data for " +
+        (structuredDataCapture?.getShortTextExtension(itemDef) ??
+          itemDef.text) +
+        " ..."
+    );
+    const newAnswer = await GenerateSuggestedAnswer(
+      questionnaire,
+      qr,
+      existingAnswer,
+      linkId
+    );
+    setExtensionStringValue(
+      newAnswer,
+      "http://fhir.fhirpath-lab.com/StructureDefinition/ai-generated-answer",
+      newAnswer.answer[0].valueString
+    );
+
+    if (newAnswer) {
+      //if (existingAnswer) {
+      const qrLatest = getResponse();
+      const result = PatchQuestionnaireResponse(
+        questionnaire,
+        qrLatest,
+        newAnswer
+      );
+      //}
+      // patch in the answer into the response
+      setQuestionnaireResponseJson(JSON.stringify(result, null, 2));
+
+      let existingAnswers = generatedAnswers;
+      existingAnswers.push(linkId);
+      setGeneratedAnswers(existingAnswers);
+    }
+    setGeneratingForm(false);
+    setGenerationMsg("");
+  }
 
   useEffect(() => {
     if (!startingForm) return;
@@ -171,37 +246,6 @@ Contacts
       ...categories,
       [categoryName]: categories[categoryName].filter((a) => a !== action),
     });
-  }
-  function findItem(item, linkId) {
-    for (const i of item) {
-      if (i.item) {
-        let found = findItem(i.item, linkId);
-        if (found) return found;
-      }
-    }
-    return item.find((i) => i.linkId === linkId);
-  }
-
-  function PatchQuestionnaire(questionnaire, patchItem) {
-    let result = {
-      ...questionnaire,
-      item: PatchQuestionnaireItem(questionnaire.item, patchItem),
-    };
-    return result;
-  }
-
-  function PatchQuestionnaireItem(item, patchItem) {
-    if (!item) return;
-    let result = item.map((i) => {
-      if (i.item) {
-        i.item = PatchQuestionnaireItem(i.item, patchItem);
-      }
-      if (i.linkId === patchItem.linkId) {
-        return patchItem;
-      }
-      return i;
-    });
-    return result;
   }
 
   const handleAction = {
@@ -239,7 +283,10 @@ Contacts
       <div style={{ flex: 1 }}>
         {/* Center Pane: Chat Dialog */}
         <span className="generation-message">{generationMsg}</span>
-        <ChatDialog generatingForm={generatingForm} />
+        <ChatDialog
+          generatingForm={generatingForm}
+          itemWithFocus={itemWithFocus}
+        />
         {/* <TextField
         multiline
         fullWidth
@@ -251,10 +298,10 @@ Contacts
           onClick={function (e) {
             const qr = questionnaireResponseJson;
             try {
-                setQuestionnaireResponse(JSON.parse(qr));
-              } catch (err) {
-                console.log(err);
-              }
+              setQuestionnaireResponse(JSON.parse(qr));
+            } catch (err) {
+              console.log(err);
+            }
           }}
         >
           Update answers
@@ -281,6 +328,9 @@ Contacts
       <div style={{ flex: 1 }} className="preview-pane">
         {/* Right Pane: Preview */}
         <Preview
+          onFocus={(linkId) => {
+            generateSuggestions(linkId);
+          }}
           questionnaire={questionnaire}
           questionnaireResponse={questionnaireResponse}
         />
@@ -353,17 +403,17 @@ Contacts
                     setQuestionnaireResponseJson(JSON.stringify(qr, null, 2));
 
                     // Generate suggestions
-                    const refineIdeas = await refine(client, loadedQuestionnaire, (message) => {
-                      setGenerationMsg(message);
-                    });
-                    setCategories(
-                      Object.fromEntries(
-                        refineIdeas.categories.map((c) => [
-                          c.title,
-                          c.suggestions,
-                        ])
-                      )
-                    );
+                    // const refineIdeas = await refine(client, loadedQuestionnaire, (message) => {
+                    //   setGenerationMsg(message);
+                    // });
+                    // setCategories(
+                    //   Object.fromEntries(
+                    //     refineIdeas.categories.map((c) => [
+                    //       c.title,
+                    //       c.suggestions,
+                    //     ])
+                    //   )
+                    // );
                     setGenerationMsg(null);
                     setGeneratingForm(false);
                   }}
