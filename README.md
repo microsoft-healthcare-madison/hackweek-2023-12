@@ -47,13 +47,27 @@ flowchart TD
 
 * Day 3: UX for filling forms (with auto-population assistance)
 
+# Themes
+
+* Strong built-in capabilities
+* In-context learning (e.g., with FHIR schema) helps steer generation tasks
+* Feedback look (e.g., with FHIR validator or code interpreter) can be magical
+* "Interfaces" are key -- give LLM a specific task when "creative" work is involved, and then use structured approaches to prevent errors downstream
+  * e.g., gating application of changes with a human-facing decision
+  * e.g., working out implications in a structured way, rather than asking the LLM
+* Real/realistic are hard to come by, for testing and intuition-building, as well as evaluating a model's performance
+  * Synthetic clinical notes have been helpful for intuition building
+  * May be helpful for benchmarking, too
+
 
 ---
 
 # Discovered issues / open problems
 
 * Processing of form text is often cut off with comments like "// additional items in same format".
-* some changes should require multiple patches to be applied - like when changing a linkId it should also change usage of the linkId elsewhere - such as in enableWhen expressions such as in the below suggestion for a variable name change
+  
+* some changes should require multiple patches to be applied - like when changing a `linkId` it should also change usage of the linkId elsewhere, including `enableWhen` expressions. 
+
 ```
 Ambiguous Language
 Clarify 'patname' to 'patientName' for readability and understanding in extensions
