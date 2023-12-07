@@ -20,6 +20,15 @@
     margin-top: 8px;
     margin-bottom: 8px;
 }
+.preview-pane div[data-linkid] {
+    color:plum;
+    font-weight: 200;
+    font-style: italic;
+}
+
+.preview-pane div[data-linkid]::before {
+    content:'linkId: ';
+}
 
 .tri-pane-display {
     display: flex;
