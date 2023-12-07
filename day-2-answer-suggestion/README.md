@@ -2,21 +2,21 @@
 
 ## Examples
 
-#### Inline simple question
+#### Detailed question
+
+["Provide all details necessary to determine the patient's breast cancer stage"](outputs/provide-all-details-needed-to-determine-the-breast-cancer-stage.md)
+
+
+#### Asking a single question
 ```sh
 bun run --watch src/index.ts --patient sample-patient-1/  --question "what stage breast cancer was found?"
 ```
 
-See [example output](./outputs/inline.txt)
-
-#### Multi-part question from external file
+#### Asking a multi-part question from an external questionnaire
 
 ```sh
 bun run --watch src/index.ts  --patient sample-patient-1/  --questionnairefile questionnaires/biopsy.json  
 ```
-
-See [example output](./outputs/external.txt)
-
 
 ## Setup
 Include OPENAI env vars in `.env.local`:
