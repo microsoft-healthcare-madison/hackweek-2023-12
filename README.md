@@ -49,16 +49,7 @@ flowchart TD
 
 # Themes
 
-* Strong built-in capabilities
-* In-context learning (e.g., with FHIR schema) helps steer generation tasks
-* Feedback look (e.g., with FHIR validator or code interpreter) can be magical
-* "Interfaces" are key -- give LLM a specific task when "creative" work is involved, and then use structured approaches to prevent errors downstream
-  * e.g., gating application of changes with a human-facing decision
-  * e.g., working out implications in a structured way, rather than asking the LLM
-* Real/realistic are hard to come by, for testing and intuition-building, as well as evaluating a model's performance
-  * Synthetic clinical notes have been helpful for intuition building
-  * May be helpful for benchmarking, too
-
+(In hackmd for editing.)
 
 ---
 
