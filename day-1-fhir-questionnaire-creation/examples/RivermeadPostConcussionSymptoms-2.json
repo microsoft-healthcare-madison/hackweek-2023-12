@@ -1,0 +1,424 @@
+{
+  "resourceType": "Questionnaire",
+  "id": "rivermead-post-concussion-symptoms",
+  "url": "http://fhir.forms-lab.com/Questionnaire/rivermead-post-concussion-symptoms",
+  "title": "The Rivermead Post-Concussion Symptoms Questionnaire",
+  "status": "active",
+  "subjectType": [
+    "Patient"
+  ],
+  "date": "2023-06-23",
+  "publisher": "FHIR Forms Lab",
+  "description": "The Rivermead Post-Concussion Symptoms Questionnaire is used to assess symptoms after a head injury or accident.",
+  "purpose": "To evaluate and compare the presence and severity of post-concussion symptoms with the patient's state before the accident.",
+  "item": [
+    {
+      "linkId": "1",
+      "type": "display",
+      "text": "After a head injury or accident some people experience symptoms which can cause worry or nuisance. We would like to know if you now suffer from any of the symptoms given below. As many of these symptoms occur normally, we would like you to compare yourself now with before the accident. For each one, please circle the number closest to your answer.\n0 = Not experienced at all\n1 = No more of a problem\n2 = A mild problem\n3 = A moderate problem\n4 = A severe problem\nCompared with before the accident, do you now (i.e., over the last 24 hours) suffer from:"
+    },
+    {
+      "linkId": "2",
+      "text": "Headaches",
+      "type": "integer",
+      "required": true,
+      "answerOption": [
+        {
+          "valueInteger": 0
+        },
+        {
+          "valueInteger": 1
+        },
+        {
+          "valueInteger": 2
+        },
+        {
+          "valueInteger": 3
+        },
+        {
+          "valueInteger": 4
+        }
+      ]
+    },
+    {
+      "linkId": "3",
+      "text": "Feelings of Dizziness",
+      "type": "integer",
+      "required": true,
+      "answerOption": [
+        {
+          "valueInteger": 0
+        },
+        {
+          "valueInteger": 1
+        },
+        {
+          "valueInteger": 2
+        },
+        {
+          "valueInteger": 3
+        },
+        {
+          "valueInteger": 4
+        }
+      ]
+    },
+    {
+      "linkId": "4",
+      "text": "Nausea and/or Vomiting",
+      "type": "integer",
+      "required": true,
+      "answerOption": [
+        {
+          "valueInteger": 0
+        },
+        {
+          "valueInteger": 1
+        },
+        {
+          "valueInteger": 2
+        },
+        {
+          "valueInteger": 3
+        },
+        {
+          "valueInteger": 4
+        }
+      ]
+    },
+    {
+      "linkId": "5",
+      "text": "Noise Sensitivity, easily upset by loud noise",
+      "type": "integer",
+      "required": true,
+      "answerOption": [
+        {
+          "valueInteger": 0
+        },
+        {
+          "valueInteger": 1
+        },
+        {
+          "valueInteger": 2
+        },
+        {
+          "valueInteger": 3
+        },
+        {
+          "valueInteger": 4
+        }
+      ]
+    },
+    {
+      "linkId": "6",
+      "text": "Sleep Disturbance",
+      "type": "integer",
+      "required": true,
+      "answerOption": [
+        {
+          "valueInteger": 0
+        },
+        {
+          "valueInteger": 1
+        },
+        {
+          "valueInteger": 2
+        },
+        {
+          "valueInteger": 3
+        },
+        {
+          "valueInteger": 4
+        }
+      ]
+    },
+    {
+      "linkId": "7",
+      "text": "Fatigue, tiring more easily",
+      "type": "integer",
+      "required": true,
+      "answerOption": [
+        {
+          "valueInteger": 0
+        },
+        {
+          "valueInteger": 1
+        },
+        {
+          "valueInteger": 2
+        },
+        {
+          "valueInteger": 3
+        },
+        {
+          "valueInteger": 4
+        }
+      ]
+    },
+    {
+      "linkId": "8",
+      "text": "Being Irritable, easily angered",
+      "type": "integer",
+      "required": true,
+      "answerOption": [
+        {
+          "valueInteger": 0
+        },
+        {
+          "valueInteger": 1
+        },
+        {
+          "valueInteger": 2
+        },
+        {
+          "valueInteger": 3
+        },
+        {
+          "valueInteger": 4
+        }
+      ]
+    },
+    {
+      "linkId": "9",
+      "text": "Feeling Depressed or Tearful",
+      "type": "integer",
+      "required": true,
+      "answerOption": [
+        {
+          "valueInteger": 0
+        },
+        {
+          "valueInteger": 1
+        },
+        {
+          "valueInteger": 2
+        },
+        {
+          "valueInteger": 3
+        },
+        {
+          "valueInteger": 4
+        }
+      ]
+    },
+    {
+      "linkId": "10",
+      "text": "Feeling Frustrated or Impatient",
+      "type": "integer",
+      "required": true,
+      "answerOption": [
+        {
+          "valueInteger": 0
+        },
+        {
+          "valueInteger": 1
+        },
+        {
+          "valueInteger": 2
+        },
+        {
+          "valueInteger": 3
+        },
+        {
+          "valueInteger": 4
+        }
+      ]
+    },
+    {
+      "linkId": "11",
+      "text": "Forgetfulness, poor memory",
+      "type": "integer",
+      "required": true,
+      "answerOption": [
+        {
+          "valueInteger": 0
+        },
+        {
+          "valueInteger": 1
+        },
+        {
+          "valueInteger": 2
+        },
+        {
+          "valueInteger": 3
+        },
+        {
+          "valueInteger": 4
+        }
+      ]
+    },
+    {
+      "linkId": "12",
+      "text": "Poor Concentration",
+      "type": "integer",
+      "required": true,
+      "answerOption": [
+        {
+          "valueInteger": 0
+        },
+        {
+          "valueInteger": 1
+        },
+        {
+          "valueInteger": 2
+        },
+        {
+          "valueInteger": 3
+        },
+        {
+          "valueInteger": 4
+        }
+      ]
+    },
+    {
+      "linkId": "13",
+      "text": "Taking Longer to Think",
+      "type": "integer",
+      "required": true,
+      "answerOption": [
+        {
+          "valueInteger": 0
+        },
+        {
+          "valueInteger": 1
+        },
+        {
+          "valueInteger": 2
+        },
+        {
+          "valueInteger": 3
+        },
+        {
+          "valueInteger": 4
+        }
+      ]
+    },
+    {
+      "linkId": "14",
+      "text": "Blurred Vision",
+      "type": "integer",
+      "required": true,
+      "answerOption": [
+        {
+          "valueInteger": 0
+        },
+        {
+          "valueInteger": 1
+        },
+        {
+          "valueInteger": 2
+        },
+        {
+          "valueInteger": 3
+        },
+        {
+          "valueInteger": 4
+        }
+      ]
+    },
+    {
+      "linkId": "15",
+      "text": "Light Sensitivity, easily upset by bright light",
+      "type": "integer",
+      "required": true,
+      "answerOption": [
+        {
+          "valueInteger": 0
+        },
+        {
+          "valueInteger": 1
+        },
+        {
+          "valueInteger": 2
+        },
+        {
+          "valueInteger": 3
+        },
+        {
+          "valueInteger": 4
+        }
+      ]
+    },
+    {
+      "linkId": "16",
+      "text": "Double Vision",
+      "type": "integer",
+      "required": true,
+      "answerOption": [
+        {
+          "valueInteger": 0
+        },
+        {
+          "valueInteger": 1
+        },
+        {
+          "valueInteger": 2
+        },
+        {
+          "valueInteger": 3
+        },
+        {
+          "valueInteger": 4
+        }
+      ]
+    },
+    {
+      "linkId": "17",
+      "text": "Restlessness",
+      "type": "integer",
+      "required": true,
+      "answerOption": [
+        {
+          "valueInteger": 0
+        },
+        {
+          "valueInteger": 1
+        },
+        {
+          "valueInteger": 2
+        },
+        {
+          "valueInteger": 3
+        },
+        {
+          "valueInteger": 4
+        }
+      ]
+    },
+    {
+      "linkId": "18",
+      "text": "Are you experiencing any other difficulties?",
+      "type": "group",
+      "repeats": true,
+      "item": [
+        {
+          "linkId": "18.1",
+          "text": "Please describe",
+          "type": "text"
+        },
+        {
+          "linkId": "18.2",
+          "text": "Severity",
+          "type": "integer",
+          "answerOption": [
+            {
+              "valueInteger": 0
+            },
+            {
+              "valueInteger": 1
+            },
+            {
+              "valueInteger": 2
+            },
+            {
+              "valueInteger": 3
+            },
+            {
+              "valueInteger": 4
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
