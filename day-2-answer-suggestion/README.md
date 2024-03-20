@@ -1,5 +1,21 @@
 # day-2-answer-suggestion
 
+## Process Flow
+
+To extract health information from an Electronic Health Records (EHR), we use a structured three-stage process, with LLM prompts at each stage:
+
+1. **Source Data Retrieval**
+   - Begin with **keyword generation** related to the health question.
+   - Follow with a **search** by these keywords to find relevant EHR data.
+
+2. **Target Representation Modeling**
+   - Create structured templates for data organization.
+   - Set detailed extraction instructions for the model.
+
+3. **Processing and Summarization**
+   - Process all identified source data, abstracting into templates by following instructions.
+   - Summarize the processed data to directly answer the health question.
+
 ## Examples
 
 #### Detailed question
